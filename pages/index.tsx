@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import { Children } from 'react'
 import Setting from 'components/Setting'
 
 import styled from 'styled-components'
@@ -6,6 +7,7 @@ import styled from 'styled-components'
 const Home: NextPage = () => {
   return (
     <Main>
+      nextjs
       <Setting />
     </Main>
   )

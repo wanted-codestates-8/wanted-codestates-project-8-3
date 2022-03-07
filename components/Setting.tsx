@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { FaCog } from 'react-icons/fa'
 import { selectSelector } from 'redux/slice'
 import { useAppSelector } from 'redux/store'
+import OptionLists from './OptionLists'
 import OptionInput from './OptionInput'
 
 function Setting() {
@@ -20,7 +21,15 @@ function Setting() {
         <FaCog />
       </CogButton>
 
-      {showDropdown && <Dropdown className="flex-center-C"></Dropdown>}
+      {showDropdown && (
+        <Dropdown className="flex-center-C">
+          <OptionLists>타이틀</OptionLists>
+          <OptionLists>검색</OptionLists>
+          <OptionLists>제목</OptionLists>
+          <OptionLists>제목</OptionLists>
+        </Dropdown>
+      )}
+
     </Section>
   )
 }
