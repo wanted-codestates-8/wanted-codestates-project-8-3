@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { FaCog } from 'react-icons/fa'
 import { selectSelector } from 'redux/slice'
 import { useAppSelector } from 'redux/store'
@@ -26,20 +26,25 @@ function Setting() {
         <Dropdown className="flex-center-C">
           <Radio />
           <OptionLists>타이틀</OptionLists>
+
+          <Wrapper className="flex-center-C">
+            <OptionInput propertyKey={{ name: 'titles', titleIdx: 0 }} />
+            <OptionInput propertyKey={{ name: 'titles', titleIdx: 1 }} />
+          </Wrapper>
+
           <OptionLists>검색</OptionLists>
           <OptionLists>제목</OptionLists>
           <OptionLists>제목</OptionLists>
+
+          <Wrapper className="flex-center-C">
+            <OptionInput propertyKey={{ name: 'width' }} debounce />
+            <OptionInput propertyKey={{ name: 'width' }} debounce />
+          </Wrapper>
         </Dropdown>
       )}
-
     </Section>
   )
 }
-
-export const Wrapper = styled.li`
-  width: 100%;
-  padding: 1rem;
-`
 
 const Section = styled.section`
   position: absolute;
@@ -64,6 +69,29 @@ const Dropdown = styled.ul`
   border-radius: 1rem;
   width: 30rem;
   margin-top: 1rem;
+`
+
+const rotateZ = css`
+  @keyframes rotateZ {
+    0% {
+      opcity: 0;
+      transform: translateZ(290px);
+    }
+    80% {
+      transform: translateZ(10px);
+    }
+    100% {
+      opacity: 1;
+      trnasform: translateZ(0);
+    }
+  }
+`
+
+export const Wrapper = styled.li`
+  width: 100%;
+  padding: 1rem 2rem;
+  border-bottom: solid 0.2rem ${({ theme }) => theme.colors.grayOne};
+  gap: 0.17rem;
 `
 
 export default Setting

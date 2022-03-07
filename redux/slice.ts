@@ -19,6 +19,8 @@ export interface SelectorState {
   }
 }
 
+type OptionType = SelectorState['option']
+
 const initialState: SelectorState = {
   items: {
     available: [],
@@ -40,7 +42,9 @@ export const selectorSlice = createSlice({
   name: 'selector',
   initialState,
   reducers: {
-    updateOption: (state, action: PayloadAction<number>) => {},
+    updateOption: (state, action: PayloadAction<OptionType>) => {
+      state.option = action.payload
+    },
   },
 })
 

@@ -81,6 +81,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       pointColor: '',
       lightblue: '#C5E2EE',
       starColor: '#fd4',
+      grayZero: '#d2d2d2',
       grayOne: '#d5d5d5',
       blackOne: '#1c1c1c',
       blackTwo: '#111',
