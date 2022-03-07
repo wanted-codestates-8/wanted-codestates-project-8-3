@@ -4,11 +4,11 @@ import Setting from 'components/Setting'
 import styled from 'styled-components'
 import AvailableOptions from '../components/AvailableOptions'
 import SelectedOptions from 'components/SelectedOptions'
+import Buttons from 'components/Buttons'
 
 const Home: NextPage = () => {
   return (
     <Main>
-      nextjs
       <AvailableOptions />
       <Buttons />
       <SelectedOptions />
