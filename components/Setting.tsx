@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { FaCog } from 'react-icons/fa'
 import { selectSelector } from 'redux/slice'
 import { useAppSelector } from 'redux/store'
-
+import Radio from './Radio'
 function Setting() {
   const [showDropdown, setShowDropdown] = useState(true)
   const selector = useAppSelector(selectSelector)
@@ -36,6 +36,7 @@ function Setting() {
           <div>heloo</div>
           <div>heloo</div>
           <div>heloo</div>
+          <Radio />
         </Dropdown>
       )}
     </Section>
@@ -60,7 +61,7 @@ const CogButton = styled.button`
   align-self: flex-end;
 `
 
-const Dropdown = styled.div`
+const Dropdown = styled.ul`
   border: 0.2rem solid ${({ theme }) => theme.colors.grayOne};
   border-radius: 1rem;
   width: 30rem;
