@@ -71,6 +71,21 @@ export const selectorSlice = createSlice({
         selected: emojiMenus,
       }
     },
+    dragAndDrop: (
+      state,
+      action: PayloadAction<{
+        items: keyof SelectorState['items']
+        from: number
+        to: number
+      }>
+    ) => {
+      const { items, from, to } = action.payload
+      const selectedItems = state.items[items]
+      ;[selectedItems[from], selectedItems[to]] = [
+        selectedItems[to],
+        selectedItems[from],
+      ]
+    },
     updateOption: (
       state,
       action: PayloadAction<{
