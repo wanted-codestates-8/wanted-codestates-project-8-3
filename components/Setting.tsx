@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { FaCog } from 'react-icons/fa'
 import { selectSelector } from 'redux/slice'
 import { useAppSelector } from 'redux/store'
+import OptionInput from './OptionInput'
 
 function Setting() {
   const [showDropdown, setShowDropdown] = useState(true)
@@ -19,28 +20,15 @@ function Setting() {
         <FaCog />
       </CogButton>
 
-      {showDropdown && (
-        <Dropdown className="flex-center-C">
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-        </Dropdown>
-      )}
+      {showDropdown && <Dropdown className="flex-center-C"></Dropdown>}
     </Section>
   )
 }
+
+export const Wrapper = styled.li`
+  width: 100%;
+  padding: 1rem;
+`
 
 const Section = styled.section`
   position: absolute;
@@ -60,7 +48,7 @@ const CogButton = styled.button`
   align-self: flex-end;
 `
 
-const Dropdown = styled.div`
+const Dropdown = styled.ul`
   border: 0.2rem solid ${({ theme }) => theme.colors.grayOne};
   border-radius: 1rem;
   width: 30rem;
