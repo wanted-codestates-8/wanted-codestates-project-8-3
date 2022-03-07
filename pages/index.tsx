@@ -1,21 +1,23 @@
-import SearchBar from 'components/SearchBar'
+import Buttons from 'components/Buttons'
 import type { NextPage } from 'next'
-
 import styled from 'styled-components'
+import AvailableOptions from '../components/AvailableOptions'
 
 const Home: NextPage = () => {
   return (
     <Main>
-      <SearchBar />
+      <AvailableOptions />
+      <Buttons />
+      <AvailableOptions />
     </Main>
   )
 }
 
 const Main = styled.main`
+  display: flex;
   min-width: 120rem;
   max-width: 120rem;
   height: 80vh;
-  border: solid 1px rgba(0, 0, 0, 0.2);
   margin: 0 auto;
 `
 

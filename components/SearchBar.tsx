@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import styled from 'styled-components'
 import { emojiMenus } from 'redux/sample_data'
 
-const SearchBar = () => {
-  const [searchKeyword, setSearchKeyword] = useState<string>('')
-  const [resultList, setResultList] = useState([])
+interface SearchProps {
+  setSearchResult: Dispatch<SetStateAction<typeof emojiMenus>>
+}
 
-  let searchList: any = []
+const SearchBar = ({ setSearchResult }: SearchProps) => {
+  const [searchKeyword, setSearchKeyword] = useState<string>('')
+  const [resultList, setResultList] = useState<typeof emojiMenus>([])
+
+  let searchList: typeof emojiMenus = []
 
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
     let keyword = e.target.value
@@ -14,13 +18,13 @@ const SearchBar = () => {
       searchList = emojiMenus.filter((e) => e.name.includes(keyword))
     }
     setSearchKeyword(keyword)
-    setResultList(searchList)
+    setSearchResult(searchList)
   }
 
   return (
     <SearchWrapper>
       <SearchInput placeholder="search" onChange={onChangeSearch} />
-      {resultList.map((item: any) => {
+      {resultList.map((item) => {
         return (
           <li key={item.id}>
             <span>{item.emoji}</span>
