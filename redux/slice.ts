@@ -42,8 +42,61 @@ export const selectorSlice = createSlice({
   name: 'selector',
   initialState,
   reducers: {
-    updateOption: (state, action: PayloadAction<OptionType>) => {
-      state.option = action.payload
+    resetItems: (state) => {
+      state.items = initialState.items
+    },
+    moveToAvailable: (state, action: PayloadAction<number[]>) => {
+      for (const id of action.payload) {
+        const targetIdx = state.items.selected.findIndex((v) => v.id === id)
+        state.items.available.push(state.items.selected[targetIdx])
+        state.items.available.splice(targetIdx, 1)
+      }
+    },
+    moveToSelected: (state, action: PayloadAction<number[]>) => {
+      for (const id of action.payload) {
+        const targetIdx = state.items.available.findIndex((v) => v.id === id)
+        state.items.selected.push(state.items.available[targetIdx])
+        state.items.selected.splice(targetIdx, 1)
+      }
+    },
+    moveAllToAvailable: (state) => {
+      state.items = {
+        available: emojiMenus,
+        selected: [],
+      }
+    },
+    moveAllToSelected: (state) => {
+      state.items = {
+        available: [],
+        selected: emojiMenus,
+      }
+    },
+    dragAndDrop: (
+      state,
+      action: PayloadAction<{
+        items: keyof SelectorState['items']
+        from: number
+        to: number
+      }>
+    ) => {
+      const { items, from, to } = action.payload
+      const selectedItems = state.items[items]
+      ;[selectedItems[from], selectedItems[to]] = [
+        selectedItems[to],
+        selectedItems[from],
+      ]
+    },
+    updateOption: (
+      state,
+      action: PayloadAction<{
+        key: keyof SelectorState['option']
+        value: ValueOf<SelectorState['option']>
+      }>
+    ) => {
+      state.option = {
+        ...state.option,
+        [action.payload.key]: action.payload.value,
+      }
     },
   },
 })
