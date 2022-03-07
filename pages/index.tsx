@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import { Children } from 'react'
 import Setting from 'components/Setting'
 
 import styled from 'styled-components'
