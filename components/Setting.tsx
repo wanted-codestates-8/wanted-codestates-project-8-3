@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { FaCog } from 'react-icons/fa'
 import { selectSelector } from 'redux/slice'
 import { useAppSelector } from 'redux/store'
+import Radio from './Radio'
 import OptionLists from './OptionLists'
 import OptionInput from './OptionInput'
 
@@ -23,6 +24,7 @@ function Setting() {
 
       {showDropdown && (
         <Dropdown className="flex-center-C">
+          <Radio />
           <OptionLists>타이틀</OptionLists>
           <OptionLists>검색</OptionLists>
           <OptionLists>제목</OptionLists>
