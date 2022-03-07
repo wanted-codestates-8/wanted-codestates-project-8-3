@@ -25,6 +25,9 @@ const List = styled.li`
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
+  &:last-child {
+    border-bottom: none;
+  }
 `
 const SubTitle = styled.div`
   font-size: 18px;

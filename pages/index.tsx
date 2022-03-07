@@ -13,10 +13,10 @@ const Home: NextPage = () => {
 }
 
 const Main = styled.main`
-  min-width: 50rem;
-  max-width: 80rem;
-  height: 100vh;
-  border: solid 1px rgba(0, 0, 0, 0.2);
+  display: flex;
+  min-width: 120rem;
+  max-width: 120rem;
+  height: 80vh;
   margin: 0 auto;
   position: relative;
 `

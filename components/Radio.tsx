@@ -41,10 +41,12 @@ export default function Radio() {
 }
 
 const RadioWrap = styled.li`
-  display: flex;
   width: 100%;
-  padding: 1rem;
-  border: 0.2rem solid ${({ theme }) => theme.colors.grayOne};
+  border-bottom: solid 0.2rem ${({ theme }) => theme.colors.grayOne};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
 `
 
 const Span = styled.span`

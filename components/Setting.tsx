@@ -24,7 +24,6 @@ function Setting() {
 
       {showDropdown && (
         <Dropdown className="flex-center-C">
-          <Radio />
           <OptionLists>타이틀</OptionLists>
 
           <Wrapper className="flex-center-C">
@@ -33,8 +32,9 @@ function Setting() {
           </Wrapper>
 
           <OptionLists>검색</OptionLists>
-          <OptionLists>제목</OptionLists>
-          <OptionLists>제목</OptionLists>
+          <OptionLists>하나씩만 옮기기</OptionLists>
+          <OptionLists>선택된 아이탬 개수 표시</OptionLists>
+          <Radio />
 
           <Wrapper className="flex-center-C">
             <OptionInput propertyKey={{ name: 'width' }} debounce />
