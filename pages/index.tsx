@@ -2,13 +2,14 @@ import Buttons from 'components/Buttons'
 import type { NextPage } from 'next'
 import styled from 'styled-components'
 import AvailableOptions from '../components/AvailableOptions'
+import SelectedOptions from 'components/SelectedOptions'
 
 const Home: NextPage = () => {
   return (
     <Main>
       <AvailableOptions />
       <Buttons />
-      <AvailableOptions />
+      <SelectedOptions />
     </Main>
   )
 }

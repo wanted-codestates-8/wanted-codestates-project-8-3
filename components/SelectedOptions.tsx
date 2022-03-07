@@ -4,13 +4,13 @@ import { emojiMenus } from '../redux/sample_data'
 import SearchBar from './SearchBar'
 import Footer from './Footer'
 
-const AvailableOptions = () => {
+const SelectedOptions = () => {
   const [searchResult, setSearchResult] = useState<typeof emojiMenus>([])
   return (
     <ListWrapper>
         <SearchBar setSearchResult={setSearchResult} />
         <AvailableWrapper>
-          <AvailableTitle>available Options</AvailableTitle>
+          <AvailableTitle>selected Options</AvailableTitle>
           {searchResult.length > 0
             ? searchResult.map((el) => {
                 return (
@@ -110,4 +110,4 @@ const SingleList = styled.div`
 
 `
 
-export default AvailableOptions
+export default SelectedOptions
