@@ -1,14 +1,14 @@
-import Buttons from 'components/Buttons'
 import type { NextPage } from 'next'
+import { Children } from 'react'
+import Setting from 'components/Setting'
+
 import styled from 'styled-components'
-import AvailableOptions from '../components/AvailableOptions'
 
 const Home: NextPage = () => {
   return (
     <Main>
-      <AvailableOptions />
-      <Buttons />
-      <AvailableOptions />
+      nextjs
+      <Setting />
     </Main>
   )
 }
@@ -19,6 +19,7 @@ const Main = styled.main`
   max-width: 120rem;
   height: 80vh;
   margin: 0 auto;
+  position: relative;
 `
 
 export default Home
