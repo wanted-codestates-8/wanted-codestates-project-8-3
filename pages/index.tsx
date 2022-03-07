@@ -1,5 +1,6 @@
-import Buttons from 'components/Buttons'
 import type { NextPage } from 'next'
+import Setting from 'components/Setting'
+
 import styled from 'styled-components'
 import AvailableOptions from '../components/AvailableOptions'
 import SelectedOptions from 'components/SelectedOptions'
@@ -7,9 +8,11 @@ import SelectedOptions from 'components/SelectedOptions'
 const Home: NextPage = () => {
   return (
     <Main>
+      nextjs
       <AvailableOptions />
       <Buttons />
       <SelectedOptions />
+      <Setting />
     </Main>
   )
 }
@@ -20,6 +23,7 @@ const Main = styled.main`
   max-width: 120rem;
   height: 80vh;
   margin: 0 auto;
+  position: relative;
 `
 
 export default Home
