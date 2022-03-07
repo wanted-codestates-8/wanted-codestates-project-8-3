@@ -4,16 +4,20 @@ import Setting from 'components/Setting'
 import styled from 'styled-components'
 import AvailableOptions from '../components/AvailableOptions'
 import SelectedOptions from 'components/SelectedOptions'
+import Buttons from 'components/Buttons'
+import Header from 'components/Header'
 
 const Home: NextPage = () => {
   return (
+    <>
+    <Header />
     <Main>
-      nextjs
       <AvailableOptions />
       <Buttons />
       <SelectedOptions />
       <Setting />
     </Main>
+    </>
   )
 }
 
