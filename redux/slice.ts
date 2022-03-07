@@ -1,33 +1,49 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import type { AppState } from "./store";
+import type { AppState } from './store'
 
-export interface FormState {
-  value: number;
-  status: "idle" | "loading" | "failed";
+export interface SelectorState {
+  items: {
+    available: any[]
+    selected: any[]
+  }
+  option: {
+    showTitle: boolean
+    titles: [string, string]
+    search: boolean
+    onlyOne: boolean
+    selectedItems: boolean
+    itemSize: string
+    width: number
+    height: number
+  }
 }
 
-const initialState: FormState = {
-  value: 0,
-  status: "idle",
-};
+const initialState: SelectorState = {
+  items: {
+    available: [],
+    selected: [],
+  },
+  option: {
+    showTitle: true,
+    titles: ['avilable options', 'selected options'],
+    search: true,
+    onlyOne: true,
+    selectedItems: true,
+    itemSize: 's',
+    width: 171,
+    height: 171,
+  },
+}
 
-export const formSlice = createSlice({
-  name: "form",
+export const selectorSlice = createSlice({
+  name: 'selector',
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
-    },
-    decrement: (state) => {
-      state.value -= 1;
-    },
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.value += action.payload;
-    },
+    updateOption: (state, action: PayloadAction<number>) => {},
   },
-});
+})
 
-export const { increment, decrement, incrementByAmount } = formSlice.actions;
-export const selectForm = (state: AppState) => state.form;
-export default formSlice.reducer;
+export const {} = selectorSlice.actions
+export const selectSelector = (state: AppState) => state.selector
+export default selectorSlice.reducer

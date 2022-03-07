@@ -19,8 +19,8 @@ const OptionLists = ({ children }: ListType) => {
 }
 
 const List = styled.li`
-  width: 300px;
-  border: solid 1px ${({ theme }) => theme.colors.gray};
+  width: 100%;
+  border-bottom: solid 0.2rem ${({ theme }) => theme.colors.grayOne};
   display: flex;
   justify-content: space-between;
   align-items: center;
