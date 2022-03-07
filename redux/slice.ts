@@ -80,11 +80,16 @@ export const selectorSlice = createSlice({
       }>
     ) => {
       const { items, from, to } = action.payload
+
+      // const selectedItems = state.items[items]
+      // ;[selectedItems[from], selectedItems[to]] = [
+      //   selectedItems[to],
+      //   selectedItems[from],
+      // ]
+
       const selectedItems = state.items[items]
-      ;[selectedItems[from], selectedItems[to]] = [
-        selectedItems[to],
-        selectedItems[from],
-      ]
+      const removeItem = selectedItems.splice(from, 1)
+      selectedItems.splice(to, 0, removeItem[0])
     },
     updateOption: (
       state,
@@ -107,6 +112,7 @@ export const {
   moveAllToSelected,
   moveToAvailable,
   moveToSelected,
+  dragAndDrop,
   updateOption,
 } = selectorSlice.actions
 export const selectSelector = (state: AppState) => state.selector

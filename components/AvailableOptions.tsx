@@ -3,32 +3,74 @@ import styled from 'styled-components'
 import { emojiMenus } from '../redux/sample_data'
 import SearchBar from './SearchBar'
 import Footer from './Footer'
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from 'react-beautiful-dnd'
+import { dragAndDrop } from 'redux/slice'
+import { useAppDispatch, useAppSelector } from 'redux/store'
 
 const AvailableOptions = () => {
-  const [searchResult, setSearchResult] = useState<typeof emojiMenus>([])
+  const availables = useAppSelector((state) => state.selector.items.available)
+  const dispatch = useAppDispatch()
+
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return
+    }
+
+    const draggingItemIndex = result.source.index
+    const dropItemIndex = result.destination.index
+    dispatch(
+      dragAndDrop({
+        items: 'available',
+        from: draggingItemIndex,
+        to: dropItemIndex,
+      })
+    )
+  }
+
   return (
-    <ListWrapper>
-        <SearchBar setSearchResult={setSearchResult} />
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <ListWrapper>
+        <SearchBar />
         <AvailableWrapper>
           <AvailableTitle>available Options</AvailableTitle>
-          {searchResult.length > 0
-            ? searchResult.map((el) => {
-                return (
-                  <SingleList key={el.id}>
-                    {el.emoji} &nbsp;&nbsp;&nbsp; {el.name}
-                  </SingleList>
-                )
-              })
-            : emojiMenus.map((el) => {
-                return (
-                  <SingleList key={el.id}>
-                    <div>{el.emoji} &nbsp;&nbsp;&nbsp; {el.name}</div>
-                  </SingleList>
-                )
-              })}
+          <Droppable droppableId="availables">
+            {(provided) => (
+              <ListBox {...provided.droppableProps} ref={provided.innerRef}>
+                {availables.length > 0 &&
+                  availables.map((el, index) => {
+                    return (
+                      <Draggable
+                        key={el.id}
+                        draggableId={String(el.id)}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <SingleList
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <div>
+                              {el.emoji} &nbsp;&nbsp;&nbsp; {el.name}
+                            </div>
+                          </SingleList>
+                        )}
+                      </Draggable>
+                    )
+                  })}
+                {provided.placeholder}
+              </ListBox>
+            )}
+          </Droppable>
         </AvailableWrapper>
-      <Footer />
-    </ListWrapper>
+        <Footer total={availables.length} />
+      </ListWrapper>
+    </DragDropContext>
   )
 }
 
@@ -59,6 +101,8 @@ const AvailableTitle = styled.div`
   border-bottom: 1px solid lightgray;
 `
 
+const ListBox = styled.div``
+
 const SingleList = styled.div`
   display: flex;
   flex-direction: row;
@@ -67,47 +111,49 @@ const SingleList = styled.div`
   /* margin-top: 0.1rem; */
 
   display: flex;
-	text-decoration: none;
-	color: inherit;
-	position: relative;
-	padding: 2.5rem 0 2rem 3.5rem;
-	background-color: #FFF;
-	cursor: pointer; 
-  
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  padding: 2.5rem 0 2rem 3.5rem;
+  background-color: #fff;
+  cursor: pointer;
+
   &:before {
-		position: absolute; 
-		left: 0;
-		bottom: 0;
-		content: "";
-		display: block;
-		width: 100%;
-		height: 100%;
-    background: rgb(255,201,71);
-    background: linear-gradient(90deg, rgba(255,201,71,1) 0%, 
-      rgba(255,125,74,1) 50%, 
-      rgba(254,69,77,1) 100%);
-		transform-origin: 0 bottom 0;
-		transform: scaleY(0);
-		transition: .2s ease-out;
-	}
-	
-	&:hover {
-		div {
-			color: #FFF;
-		}
-		&:before {
-			transform: scaleY(1);
-		}
-	}
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: rgb(255, 201, 71);
+    background: linear-gradient(
+      90deg,
+      rgba(255, 201, 71, 1) 0%,
+      rgba(255, 125, 74, 1) 50%,
+      rgba(254, 69, 77, 1) 100%
+    );
+    transform-origin: 0 bottom 0;
+    transform: scaleY(0);
+    transition: 0.2s ease-out;
+  }
+
+  &:hover {
+    div {
+      color: #fff;
+    }
+    &:before {
+      transform: scaleY(1);
+    }
+  }
 
   div {
     position: relative;
     font-size: 2rem;
     font-weight: 700;
     line-height: 1.333;
-    transition: .2s ease-out;
+    transition: 0.2s ease-out;
   }
-
 `
 
 export default AvailableOptions
