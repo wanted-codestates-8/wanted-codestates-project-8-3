@@ -4,6 +4,9 @@ import { FaCog } from 'react-icons/fa'
 import { selectSelector } from 'redux/slice'
 import { useAppSelector } from 'redux/store'
 import Radio from './Radio'
+import OptionLists from './OptionLists'
+import OptionInput from './OptionInput'
+
 function Setting() {
   const [showDropdown, setShowDropdown] = useState(true)
   const selector = useAppSelector(selectSelector)
@@ -21,27 +24,22 @@ function Setting() {
 
       {showDropdown && (
         <Dropdown className="flex-center-C">
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
-          <div>heloo</div>
           <Radio />
+          <OptionLists>타이틀</OptionLists>
+          <OptionLists>검색</OptionLists>
+          <OptionLists>제목</OptionLists>
+          <OptionLists>제목</OptionLists>
         </Dropdown>
       )}
+
     </Section>
   )
 }
+
+export const Wrapper = styled.li`
+  width: 100%;
+  padding: 1rem;
+`
 
 const Section = styled.section`
   position: absolute;
