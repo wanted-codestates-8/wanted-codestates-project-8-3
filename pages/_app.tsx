@@ -1,10 +1,10 @@
-import type { AppProps } from "next/app";
-import { store } from "redux/store";
-import { ThemeProvider } from "styled-components";
-import { createGlobalStyle } from "styled-components";
-import { Provider as ReduxProvider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { persistStore } from "redux-persist";
+import type { AppProps } from 'next/app'
+import { store } from 'redux/store'
+import { ThemeProvider } from 'styled-components'
+import { createGlobalStyle } from 'styled-components'
+import { Provider as ReduxProvider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
 
 const GlobalStyles = createGlobalStyle`
     * {
@@ -69,23 +69,23 @@ const GlobalStyles = createGlobalStyle`
       justify-content: center;
       flex-direction:column;
     }
-  `;
+  `
 
-const persistor = persistStore(store);
+const persistor = persistStore(store)
 
 function MyApp({ Component, pageProps }: AppProps) {
   const theme = {
     colors: {
       //@ common style
-      mainColor: "#FF6363",
-      pointColor: "",
-      lightblue: "#C5E2EE",
-      starColor: "#fd4",
-      grayOne: "#F7F7F7",
-      blackOne: "#1c1c1c",
-      blackTwo: "#111",
+      mainColor: '#FF6363',
+      pointColor: '',
+      lightblue: '#C5E2EE',
+      starColor: '#fd4',
+      grayOne: '#d5d5d5',
+      blackOne: '#1c1c1c',
+      blackTwo: '#111',
     },
-  };
+  }
 
   return (
     <ReduxProvider store={store}>
@@ -96,6 +96,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         </PersistGate>
       </ThemeProvider>
     </ReduxProvider>
-  );
+  )
 }
-export default MyApp;
+export default MyApp
