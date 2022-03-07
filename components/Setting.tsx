@@ -4,6 +4,7 @@ import { FaCog } from 'react-icons/fa'
 import { selectSelector } from 'redux/slice'
 import { useAppSelector } from 'redux/store'
 import OptionLists from './OptionLists'
+import OptionInput from './OptionInput'
 
 function Setting() {
   const [showDropdown, setShowDropdown] = useState(true)
@@ -28,9 +29,15 @@ function Setting() {
           <OptionLists>제목</OptionLists>
         </Dropdown>
       )}
+
     </Section>
   )
 }
+
+export const Wrapper = styled.li`
+  width: 100%;
+  padding: 1rem;
+`
 
 const Section = styled.section`
   position: absolute;
