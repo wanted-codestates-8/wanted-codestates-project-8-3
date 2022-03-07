@@ -10,13 +10,13 @@ import Header from 'components/Header'
 const Home: NextPage = () => {
   return (
     <>
-    <Header />
-    <Main>
-      <AvailableOptions />
-      <Buttons />
-      <SelectedOptions />
-      <Setting />
-    </Main>
+      <Header />
+      <Main>
+        <AvailableOptions />
+        <Buttons />
+        <SelectedOptions />
+        <Setting />
+      </Main>
     </>
   )
 }

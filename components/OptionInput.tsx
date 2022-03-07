@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import { selectSelector } from 'redux/slice'
-import { useAppSelector } from 'redux/store'
+import { selectSelector, updateOption } from 'redux/slice'
+import { useAppSelector, useAppDispatch } from 'redux/store'
 import InputDebounce from 'utils/debounce'
 
 interface InputProps {
@@ -17,17 +17,31 @@ function OptionInput({
     option: { titles, width, height },
   } = useAppSelector(selectSelector)
 
-  const [value, setValue] = useState<number | string>('')
-  const onChangeDebounce = useCallback(InputDebounce(500), [])
-  const onHandleValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
+  const dispatch = useAppDispatch()
 
-    if (debounce) {
-      onChangeDebounce(() => console.log('active after 1s'))
+  const [value, setValue] = useState<number | string>('')
+  const onChangeDebounce = useCallback(InputDebounce(1500), [])
+  const onHandleValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (name === 'width' || name === 'height') {
+      setValue(Number(e.target.value))
     } else {
-      console.log('active immediately')
+      setValue(e.target.value)
     }
   }
+
+  useEffect(() => {
+    if (value) {
+      if (debounce) {
+        onChangeDebounce(() => {
+          dispatch(updateOption({ key: name, value }))
+        })
+      } else {
+        const newValue = [...titles] as [string, string]
+        newValue[titleIdx as number] = value as string
+        dispatch(updateOption({ key: name, value: newValue }))
+      }
+    }
+  }, [value])
 
   //@ base component
   const defaultInput = (attrs: React.InputHTMLAttributes<HTMLInputElement>) => {

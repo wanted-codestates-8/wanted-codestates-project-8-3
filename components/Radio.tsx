@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { updateOption, selectSelector } from 'redux/slice'
+import { useAppDispatch, useAppSelector } from 'redux/store'
 
 export default function Radio() {
   const itemSize = [
@@ -16,12 +18,18 @@ export default function Radio() {
       value: 'M',
     },
   ]
+  const dispatch = useAppDispatch()
+  const { option } = useAppSelector(selectSelector)
 
-  const [inputStatus, setInputStatus] = useState('')
+  const [inputStatus, setInputStatus] = useState(option.itemSize)
   const handleClickRadioButton = (radioBtnName: string) => {
     setInputStatus(radioBtnName)
-    console.log(inputStatus)
   }
+
+  useEffect(() => {
+    dispatch(updateOption({ key: 'itemSize', value: inputStatus }))
+  }, [inputStatus])
+
   return (
     <RadioWrap>
       <Span>아이템 크기</Span>
