@@ -1,17 +1,24 @@
-import type { NextPage } from "next";
-
-import styled from "styled-components";
+import Buttons from 'components/Buttons'
+import type { NextPage } from 'next'
+import styled from 'styled-components'
+import AvailableOptions from '../components/AvailableOptions'
 
 const Home: NextPage = () => {
-  return <Main>nextjs</Main>;
-};
+  return (
+    <Main>
+      <AvailableOptions />
+      <Buttons />
+      <AvailableOptions />
+    </Main>
+  )
+}
 
 const Main = styled.main`
-  min-width: 50rem;
-  max-width: 80rem;
-  height: 100vh;
-  border: solid 1px rgba(0, 0, 0, 0.2);
+  display: flex;
+  min-width: 120rem;
+  max-width: 120rem;
+  height: 80vh;
   margin: 0 auto;
-`;
+`
 
-export default Home;
+export default Home
