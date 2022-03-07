@@ -6,17 +6,18 @@ import AvailableOptions from '../components/AvailableOptions'
 import SelectedOptions from 'components/SelectedOptions'
 import Buttons from 'components/Buttons'
 import Header from 'components/Header'
+import { useAppSelector } from 'redux/store'
 
 const Home: NextPage = () => {
   return (
     <>
-    <Header />
-    <Main>
-      <AvailableOptions />
-      <Buttons />
-      <SelectedOptions />
-      <Setting />
-    </Main>
+      <Header />
+      <Main>
+        <AvailableOptions />
+        <Buttons />
+        <SelectedOptions />
+        {/* <Setting /> */}
+      </Main>
     </>
   )
 }

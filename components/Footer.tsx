@@ -1,10 +1,14 @@
 import styled from 'styled-components'
 
-const Footer = () => {
+interface IFooter {
+  total: number
+}
+
+const Footer = ({ total }: IFooter) => {
   return (
-  <>
-    <SelectedListNum>0 / 4</SelectedListNum>
-  </>
+    <>
+      <SelectedListNum>0 / {total}</SelectedListNum>
+    </>
   )
 }
 
