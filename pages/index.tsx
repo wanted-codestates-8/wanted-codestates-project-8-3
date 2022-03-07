@@ -2,11 +2,16 @@ import type { NextPage } from 'next'
 import Setting from 'components/Setting'
 
 import styled from 'styled-components'
+import AvailableOptions from '../components/AvailableOptions'
+import SelectedOptions from 'components/SelectedOptions'
 
 const Home: NextPage = () => {
   return (
     <Main>
       nextjs
+      <AvailableOptions />
+      <Buttons />
+      <SelectedOptions />
       <Setting />
     </Main>
   )
