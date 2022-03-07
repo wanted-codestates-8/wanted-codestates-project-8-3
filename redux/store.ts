@@ -8,7 +8,6 @@ import selectorReducer from 'redux/slice'
 const persistConfig = {
   key: 'selectorData',
   storage,
-  blacklist: [],
 }
 
 const reducers = combineReducers({

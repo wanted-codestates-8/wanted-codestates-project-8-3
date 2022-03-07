@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
 import type { AppState } from './store'
+import { emojiMenus } from './sample_data'
 
+type ValueOf<T> = T[keyof T]
 export interface SelectorState {
   items: {
-    available: any[]
-    selected: any[]
+    available: typeof emojiMenus
+    selected: typeof emojiMenus
   }
   option: {
     showTitle: boolean
@@ -19,22 +20,21 @@ export interface SelectorState {
   }
 }
 
-type OptionType = SelectorState['option']
-
+const half = Math.floor(emojiMenus.length / 2)
 const initialState: SelectorState = {
   items: {
-    available: [],
-    selected: [],
+    available: emojiMenus.slice(0, half),
+    selected: emojiMenus.slice(half),
   },
   option: {
     showTitle: true,
-    titles: ['avilable options', 'selected options'],
+    titles: ['available options', 'selected options'],
     search: true,
     onlyOne: true,
     selectedItems: true,
     itemSize: 's',
     width: 171,
-    height: 171,
+    height: 300,
   },
 }
 
@@ -101,6 +101,13 @@ export const selectorSlice = createSlice({
   },
 })
 
-export const {} = selectorSlice.actions
+export const {
+  resetItems,
+  moveAllToAvailable,
+  moveAllToSelected,
+  moveToAvailable,
+  moveToSelected,
+  updateOption,
+} = selectorSlice.actions
 export const selectSelector = (state: AppState) => state.selector
 export default selectorSlice.reducer
