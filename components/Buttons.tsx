@@ -7,9 +7,26 @@ import {
   BsArrowCounterclockwise,
 } from 'react-icons/bs'
 import { useAppDispatch } from 'redux/store'
-import { resetItems, moveAllToSelected, moveAllToAvailable } from 'redux/slice'
+import {
+  resetItems,
+  moveAllToSelected,
+  moveAllToAvailable,
+  moveToSelected,
+  moveToAvailable,
+} from 'redux/slice'
+import { ICheckedIds } from 'pages'
 
-const Buttons = () => {
+interface IButtons {
+  checkedIds: ICheckedIds
+  onAvailableChange: (arr: number[]) => void
+  onSelectedChange: (arr: number[]) => void
+}
+
+const Buttons = ({
+  checkedIds,
+  onAvailableChange,
+  onSelectedChange,
+}: IButtons) => {
   const dispatch = useAppDispatch()
 
   return (
@@ -37,12 +54,26 @@ const Buttons = () => {
             </Button>
           </ButtonItem>
           <ButtonItem>
-            <Button className="gray" type="button">
+            <Button
+              className="gray"
+              type="button"
+              onClick={() => {
+                dispatch(moveToSelected(checkedIds.available))
+                onAvailableChange([])
+              }}
+            >
               <BsChevronRight />
             </Button>
           </ButtonItem>
           <ButtonItem>
-            <Button className="gray" type="button">
+            <Button
+              className="gray"
+              type="button"
+              onClick={() => {
+                dispatch(moveToAvailable(checkedIds.selected))
+                onSelectedChange([])
+              }}
+            >
               <BsChevronLeft />
             </Button>
           </ButtonItem>

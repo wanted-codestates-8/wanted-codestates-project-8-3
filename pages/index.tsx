@@ -8,9 +8,33 @@ import Header from 'components/Header'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { useAppDispatch } from 'redux/store'
 import { dragAndDrop } from 'redux/slice'
+import { useState } from 'react'
+
+export interface ICheckedIds {
+  available: number[]
+  selected: number[]
+}
 
 const Home: NextPage = () => {
   const dispatch = useAppDispatch()
+  const [checkedIds, setCheckedIds] = useState<ICheckedIds>({
+    available: [],
+    selected: [],
+  })
+
+  const onChangeAvailable = (arr: number[]) => {
+    setCheckedIds({
+      ...checkedIds,
+      available: arr,
+    })
+  }
+
+  const onChangeSelected = (arr: number[]) => {
+    setCheckedIds({
+      ...checkedIds,
+      selected: arr,
+    })
+  }
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) {
@@ -36,17 +60,27 @@ const Home: NextPage = () => {
   }
 
   return (
-
     <DragDropContext onDragEnd={handleDragEnd}>
       <Header />
       <Main>
-        <Options type={'available'} />
-        <Buttons />
-        <Options type={'selected'} />
-        {/* <Setting /> */}
+        <Options
+          type={'available'}
+          checkedId={checkedIds.available}
+          onChangeCheckedId={onChangeAvailable}
+        />
+        <Buttons
+          checkedIds={checkedIds}
+          onAvailableChange={onChangeAvailable}
+          onSelectedChange={onChangeSelected}
+        />
+        <Options
+          type={'selected'}
+          checkedId={checkedIds.selected}
+          onChangeCheckedId={onChangeSelected}
+        />
+        <Setting />
       </Main>
     </DragDropContext>
-
   )
 }
 
