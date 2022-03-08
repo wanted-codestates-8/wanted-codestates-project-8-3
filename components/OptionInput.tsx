@@ -7,11 +7,13 @@ import InputDebounce from 'utils/debounce'
 interface InputProps {
   propertyKey: { name: 'titles' | 'width' | 'height'; titleIdx?: number }
   debounce?: boolean
+  showDropDown: boolean
 }
 
 function OptionInput({
   propertyKey: { name, titleIdx },
   debounce,
+  showDropDown,
 }: InputProps) {
   const {
     option: { titles, width, height },
@@ -20,10 +22,18 @@ function OptionInput({
   const dispatch = useAppDispatch()
 
   const [value, setValue] = useState<number | string>('')
-  const onChangeDebounce = useCallback(InputDebounce(1500), [])
+  const onChangeDebounce = useCallback(InputDebounce(500), [])
   const onHandleValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (name === 'width' || name === 'height') {
-      setValue(Number(e.target.value))
+      if (e.target.value.length > e.target.maxLength) {
+        return
+      }
+
+      if (Number(e.target.value) > 600) {
+        setValue(600)
+      } else {
+        setValue(Number(e.target.value))
+      }
     } else {
       setValue(e.target.value)
     }
@@ -43,6 +53,10 @@ function OptionInput({
     }
   }, [value])
 
+  useEffect(() => {
+    !showDropDown && setValue('')
+  }, [showDropDown])
+
   //@ base component
   const defaultInput = (attrs: React.InputHTMLAttributes<HTMLInputElement>) => {
     return <Input value={value} onChange={onHandleValue} {...attrs} />
@@ -54,11 +68,13 @@ function OptionInput({
       return defaultInput({
         type: 'number',
         placeholder: `가로(현재 크기 ${width}px)`,
+        maxLength: 3,
       })
     case 'height':
       return defaultInput({
         type: 'number',
         placeholder: `세로(현재 크기 ${height}px)`,
+        maxLength: 3,
       })
     case 'titles':
       return defaultInput({
