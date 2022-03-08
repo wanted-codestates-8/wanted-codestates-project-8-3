@@ -28,8 +28,6 @@ const Options = ({ type }: IOptions) => {
   const selectedId = filterId.map((item) => item.id)
   const [startEnd, setStartEnd] = useState<IStartEnd>()
 
-  console.log(checkedId)
-
   const onClick = (
     e: React.MouseEvent<HTMLDivElement>,
     id: number,
@@ -50,25 +48,60 @@ const Options = ({ type }: IOptions) => {
         if (index < startEnd.start) {
           newCheckId = dataList
             .slice(index, startEnd.start + 1)
-            .filter((data) => !checkedId.includes(data.id))
             .map((data) => data.id)
-          setStartEnd({
-            start: index,
-            end: startEnd.start,
-          })
+
+          if (startEnd.end) {
+            const shiftedCheckId = dataList
+              .slice(startEnd.start, startEnd.end + 1)
+              .map((data) => data.id)
+
+            setCheckedId([
+              ...checkedId.filter((id) => !shiftedCheckId.includes(id)),
+              ...newCheckId,
+            ])
+            setStartEnd({
+              start: index,
+              end: startEnd.start,
+            })
+          } else {
+            setCheckedId([...checkedId, ...newCheckId])
+            setStartEnd({
+              ...startEnd,
+              end: index,
+            })
+          }
         } else {
-          newCheckId = dataList
-            .slice(startEnd.start, index + 1)
-            .filter((data) => !checkedId.includes(data.id))
-            .map((data) => data.id)
+          if (startEnd.end) {
+            newCheckId = dataList
+              .slice(startEnd.end, index + 1)
+              // .filter((data) => !checkedId.includes(data.id))
+              .map((data) => data.id)
 
-          setStartEnd({
-            ...startEnd,
-            end: index,
-          })
+            const shiftedCheckId = dataList
+              .slice(startEnd.start, startEnd.end + 1)
+              .map((data) => data.id)
+
+            setCheckedId([
+              ...checkedId.filter((id) => !shiftedCheckId.includes(id)),
+              ...newCheckId,
+            ])
+            setStartEnd({
+              start: startEnd.end,
+              end: index,
+            })
+          } else {
+            newCheckId = dataList
+              .slice(startEnd.start, index + 1)
+              // .filter((data) => !checkedId.includes(data.id))
+              .map((data) => data.id)
+
+            setCheckedId([...checkedId, ...newCheckId])
+            setStartEnd({
+              ...startEnd,
+              end: index,
+            })
+          }
         }
-
-        setCheckedId([...checkedId, ...newCheckId])
       }
     } else {
       setStartEnd({
