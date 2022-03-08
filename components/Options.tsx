@@ -58,7 +58,6 @@ const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
         if (checkedId.includes(id)) {
           if (startEnd.direction && startEnd.end !== null) {
             if (startEnd.direction === 'up') {
-              // TODO 로직 단순화 가능
               newCheckId = dataList
                 .slice(index, startEnd.end + 1)
                 .map((data) => data.id)
@@ -107,7 +106,7 @@ const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
           } else {
             onChangeCheckedId([
               ...checkedId,
-              ...newCheckId.slice(1, newCheckId.length + 1),
+              ...newCheckId.slice(0, newCheckId.length - 1),
             ])
           }
           setStartEnd({
@@ -241,6 +240,7 @@ const AvailableWrapper = styled.div<{ width: number; height: number }>`
     rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em,
     rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
   border-radius: 15px;
+  z-index: 1000;
 
   min-width: 25rem;
   width: ${({ width }) => `${width}px`};

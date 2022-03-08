@@ -6,7 +6,7 @@ import {
   BsChevronDoubleRight,
   BsArrowCounterclockwise,
 } from 'react-icons/bs'
-import { useAppDispatch } from 'redux/store'
+import { useAppDispatch, useAppSelector } from 'redux/store'
 import {
   resetItems,
   moveAllToSelected,
@@ -28,6 +28,9 @@ const Buttons = ({
   onSelectedChange,
 }: IButtons) => {
   const dispatch = useAppDispatch()
+  const { available, selected } = useAppSelector(
+    (state) => state.selector.items
+  )
 
   return (
     <Container>
@@ -41,12 +44,19 @@ const Buttons = ({
             </Button>
           </ButtonItem>
           <ButtonItem>
-            <Button type="button" onClick={() => dispatch(moveAllToSelected())}>
+            <Button
+              disabled={available.length > 0 ? false : true}
+              className={available.length > 0 ? 'active' : 'disabled'}
+              type="button"
+              onClick={() => dispatch(moveAllToSelected())}
+            >
               <BsChevronDoubleRight />
             </Button>
           </ButtonItem>
           <ButtonItem>
             <Button
+              disabled={selected.length > 0 ? false : true}
+              className={selected.length > 0 ? 'active' : 'disabled'}
               type="button"
               onClick={() => dispatch(moveAllToAvailable())}
             >
@@ -55,7 +65,10 @@ const Buttons = ({
           </ButtonItem>
           <ButtonItem>
             <Button
-              className="gray"
+              disabled={checkedIds.available.length > 0 ? false : true}
+              className={
+                checkedIds.available.length > 0 ? 'active' : 'disabled'
+              }
               type="button"
               onClick={() => {
                 dispatch(moveToSelected(checkedIds.available))
@@ -67,7 +80,8 @@ const Buttons = ({
           </ButtonItem>
           <ButtonItem>
             <Button
-              className="gray"
+              disabled={checkedIds.selected.length > 0 ? false : true}
+              className={checkedIds.selected.length > 0 ? 'active' : 'disabled'}
               type="button"
               onClick={() => {
                 dispatch(moveToAvailable(checkedIds.selected))
@@ -90,6 +104,8 @@ const Container = styled.div`
 
 const ButtonBox = styled.div`
   border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  overflow: hidden;
 `
 
 const ButtonList = styled.ul`
@@ -110,8 +126,12 @@ const Button = styled.button`
   padding: 10px;
   cursor: pointer;
 
-  &.gray {
+  &.disabled {
     color: #b2b2b2;
+  }
+
+  &.active {
+    color: black;
   }
 
   &:hover {

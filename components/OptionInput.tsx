@@ -1,8 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { selectSelector, updateOption } from 'redux/slice'
 import { useAppSelector, useAppDispatch } from 'redux/store'
 import InputDebounce from 'utils/debounce'
+import filterString from 'utils/filterString'
 
 interface InputProps {
   propertyKey: { name: 'titles' | 'width' | 'height'; titleIdx?: number }
@@ -22,21 +23,31 @@ function OptionInput({
   const dispatch = useAppDispatch()
 
   const [value, setValue] = useState<number | string>('')
-  const onChangeDebounce = useCallback(InputDebounce(800), [])
-  const onHandleValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (name === 'width' || name === 'height') {
-      if (e.target.value.length > e.target.maxLength) {
-        return
-      }
+  const onChangeDebounce = useCallback(InputDebounce(300), [])
 
-      if (Number(e.target.value) > 600) {
-        setValue(600)
+  const demension = (value: string) => {
+    if (filterString(value) || !value) {
+      const nextValue = value === '' ? '' : Number(value)
+      if (nextValue > 700) {
+        setValue(700)
       } else {
-        setValue(Number(e.target.value))
+        setValue(nextValue)
       }
-    } else {
-      setValue(e.target.value)
     }
+  }
+
+  const onHandleValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (name === 'width') {
+      demension(e.target.value)
+      return
+    }
+
+    if (name === 'height') {
+      demension(e.target.value)
+      return
+    }
+
+    setValue(e.target.value)
   }
 
   useEffect(() => {
@@ -66,14 +77,14 @@ function OptionInput({
   switch (name) {
     case 'width':
       return defaultInput({
-        type: 'number',
-        placeholder: `가로(현재 크기 ${width}px)`,
+        type: 'text',
+        placeholder: `가로(현재 크기 ${width}px, 최소 250px)`,
         maxLength: 3,
       })
     case 'height':
       return defaultInput({
-        type: 'number',
-        placeholder: `세로(현재 크기 ${height}px)`,
+        type: 'text',
+        placeholder: `세로(현재 크기 ${height}px, 최소 250px)`,
         maxLength: 3,
       })
     case 'titles':
@@ -87,7 +98,7 @@ function OptionInput({
 
 const Input = styled.input`
   padding: 0.7rem 1.5rem;
-  width: 80%;
+  width: 100%;
   align-self: flex-start;
   border: 0.2rem solid ${({ theme }) => theme.colors.grayOne};
   border-radius: 0.5rem;
