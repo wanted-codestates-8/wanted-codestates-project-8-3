@@ -6,26 +6,33 @@ import {
   BsChevronDoubleRight,
   BsArrowCounterclockwise,
 } from 'react-icons/bs'
+import { useAppDispatch } from 'redux/store'
+import { resetItems, moveAllToSelected, moveAllToAvailable } from 'redux/slice'
 
 const Buttons = () => {
+  const dispatch = useAppDispatch()
+
   return (
     <Container>
       <ButtonBox>
         <ButtonList>
           <ButtonItem>
-            <Button type="button">
+            <Button type="button" onClick={() => dispatch(resetItems())}>
               <BsArrowCounterclockwise
                 style={{ transform: 'rotate(-45deg)', strokeWidth: '1.5' }}
               />
             </Button>
           </ButtonItem>
           <ButtonItem>
-            <Button type="button">
+            <Button type="button" onClick={() => dispatch(moveAllToSelected())}>
               <BsChevronDoubleRight />
             </Button>
           </ButtonItem>
           <ButtonItem>
-            <Button type="button">
+            <Button
+              type="button"
+              onClick={() => dispatch(moveAllToAvailable())}
+            >
               <BsChevronDoubleLeft />
             </Button>
           </ButtonItem>

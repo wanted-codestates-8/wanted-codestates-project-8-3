@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import SearchBar from './SearchBar'
 import Footer from './Footer'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
-import { useAppDispatch, useAppSelector } from 'redux/store'
+import { useAppSelector } from 'redux/store'
 
 interface IOptions {
   type: 'available' | 'selected'
@@ -19,29 +19,28 @@ const Options = ({ type }: IOptions) => {
         <Droppable droppableId={type}>
           {(provided) => (
             <ListBox {...provided.droppableProps} ref={provided.innerRef}>
-              {dataList.length > 0 &&
-                dataList.map((el, index) => {
-                  return (
-                    <Draggable
-                      key={el.id}
-                      draggableId={String(el.id)}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <SingleList
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          <div>
-                            {el.emoji} &nbsp;&nbsp;&nbsp; {el.name}
-                          </div>
-                        </SingleList>
-                      )}
-                    </Draggable>
-                  )
-                })}
-              ){provided.placeholder}
+              {dataList.map((el, index) => {
+                return (
+                  <Draggable
+                    key={el.id}
+                    draggableId={String(el.id)}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <SingleList
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <div>
+                          {el.emoji} &nbsp;&nbsp;&nbsp; {el.name}
+                        </div>
+                      </SingleList>
+                    )}
+                  </Draggable>
+                )
+              })}
+              {provided.placeholder}
             </ListBox>
           )}
         </Droppable>
@@ -78,7 +77,9 @@ const Availabletype = styled.div`
   border-bottom: 1px solid lightgray;
 `
 
-const ListBox = styled.div``
+const ListBox = styled.div`
+  min-height: 100%;
+`
 
 const SingleList = styled.div`
   display: flex;
