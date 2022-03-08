@@ -3,10 +3,13 @@ import SearchBar from './SearchBar'
 import Footer from './Footer'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { useAppSelector } from 'redux/store'
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { ICheckedIds } from 'pages'
 
 interface IOptions {
   type: 'available' | 'selected'
+  checkedId: number[]
+  onChangeCheckedId: (arr: number[]) => void
 }
 
 interface CssProps {
@@ -20,10 +23,9 @@ interface IStartEnd {
   direction: 'up' | 'down' | null
 }
 
-const Options = ({ type }: IOptions) => {
+const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
   const dataList = useAppSelector((state) => state.selector.items[type])
   const [query, setQuery] = useState('')
-  const [checkedId, setCheckedId] = useState<number[]>([])
   const filterId = dataList.filter((item) => checkedId.includes(item.id))
   const selectedId = filterId.map((item) => item.id)
   const [startEnd, setStartEnd] = useState<IStartEnd>()
@@ -37,9 +39,11 @@ const Options = ({ type }: IOptions) => {
     if (e.shiftKey) {
       let newCheckId: number[]
 
+      // 처음 눌렀을 때
+
       if (startEnd?.start === null || startEnd?.start === undefined) {
         newCheckId = dataList.slice(0, index + 1).map((data) => data.id)
-        setCheckedId(newCheckId)
+        onChangeCheckedId(newCheckId)
 
         setStartEnd({
           start: 0,
@@ -47,6 +51,8 @@ const Options = ({ type }: IOptions) => {
           direction: null,
         })
       } else {
+        // 시프트로 영역 지정 후 안에 클릭시
+
         if (checkedId.includes(id)) {
           if (startEnd.direction && startEnd.end !== null) {
             if (startEnd.direction === 'up') {
@@ -59,7 +65,7 @@ const Options = ({ type }: IOptions) => {
                 .slice(startEnd.start, startEnd.end + 1)
                 .map((data) => data.id)
 
-              setCheckedId([
+              onChangeCheckedId([
                 ...checkedId.filter(
                   (id: number) => !removeCheckId.includes(id)
                 ),
@@ -74,7 +80,7 @@ const Options = ({ type }: IOptions) => {
                 .slice(startEnd.start, startEnd.end + 1)
                 .map((data) => data.id)
 
-              setCheckedId([
+              onChangeCheckedId([
                 ...checkedId.filter(
                   (id: number) => !removeCheckId.includes(id)
                 ),
@@ -92,12 +98,15 @@ const Options = ({ type }: IOptions) => {
               .slice(startEnd.start, startEnd.end + 1)
               .map((data) => data.id)
 
-            setCheckedId([
+            onChangeCheckedId([
               ...checkedId.filter((id) => !shiftedCheckId.includes(id)),
               ...newCheckId,
             ])
           } else {
-            setCheckedId([...checkedId, ...newCheckId])
+            onChangeCheckedId([
+              ...checkedId,
+              ...newCheckId.slice(1, newCheckId.length + 1),
+            ])
           }
           setStartEnd({
             start: index,
@@ -114,7 +123,7 @@ const Options = ({ type }: IOptions) => {
               .slice(startEnd.start, startEnd.end + 1)
               .map((data) => data.id)
 
-            setCheckedId([
+            onChangeCheckedId([
               ...checkedId.filter((id) => !shiftedCheckId.includes(id)),
               ...newCheckId,
             ])
@@ -125,10 +134,10 @@ const Options = ({ type }: IOptions) => {
             })
           } else {
             newCheckId = dataList
-              .slice(startEnd.start, index + 1)
+              .slice(startEnd.start + 1, index + 1)
               .map((data) => data.id)
 
-            setCheckedId([...checkedId, ...newCheckId])
+            onChangeCheckedId([...checkedId, ...newCheckId])
             setStartEnd({
               ...startEnd,
               end: index,
@@ -145,12 +154,16 @@ const Options = ({ type }: IOptions) => {
       })
       if (e.ctrlKey || e.metaKey) {
         if (checkedId.includes(id)) {
-          setCheckedId(checkedId.filter((v) => v !== id))
+          onChangeCheckedId(checkedId.filter((v) => v !== id))
         } else {
-          setCheckedId([...checkedId, id])
+          onChangeCheckedId([...checkedId, id])
         }
       } else {
-        setCheckedId([id])
+        if (checkedId.length === 1 && checkedId[0] === id) {
+          onChangeCheckedId([])
+        } else {
+          onChangeCheckedId([id])
+        }
       }
     }
   }
@@ -283,21 +296,8 @@ const SingleList = styled.div<CssProps>`
     }};
   }
 
-  &.selected:before {
-    transform: scaleY(1);
-  }
-
-  &.notSelected:before {
-    transform: scaleY(0);
-  }
-
   &:hover {
-    div {
-      color: #fff;
-    }
-    &:before {
-      transform: scaleY(1);
-    }
+    background-color: #eee;
   }
 
   div {
