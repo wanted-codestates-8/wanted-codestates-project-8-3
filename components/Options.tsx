@@ -17,6 +17,7 @@ interface CssProps {
   selectedId: any
 }
 
+
 interface IStartEnd {
   start: number | null
   end: number | null
@@ -24,6 +25,7 @@ interface IStartEnd {
 }
 
 const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
+  const { option } = useAppSelector(selectSelector)
   const dataList = useAppSelector((state) => state.selector.items[type])
   const [query, setQuery] = useState('')
   const filterId = dataList.filter((item) => checkedId.includes(item.id))
@@ -176,9 +178,10 @@ const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
       return filtered.map((el) => {
         return (
           <SingleList key={el.id} id={el.id} selectedId={selectedId}>
-            <div>
-              {el.emoji} &nbsp;&nbsp;&nbsp; {el.name}
-            </div>
+            <ListContent className={`${option.itemSize}`}>
+                          <span>{el.emoji}</span>
+                          <span>{el.name}</span>
+                        </ListContent>
           </SingleList>
         )
       })
@@ -195,9 +198,10 @@ const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
                 id={el.id}
                 selectedId={selectedId}
               >
-                <div>
-                  {el.emoji} &nbsp;&nbsp;&nbsp; {el.name}
-                </div>
+               <ListContent className={`${option.itemSize}`}>
+                          <span>{el.emoji}</span>
+                          <span>{el.name}</span>
+                        </ListContent>
               </SingleList>
             )}
           </Draggable>
@@ -220,28 +224,31 @@ const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
           )}
         </Droppable>
       </AvailableWrapper>
-      <Footer total={dataList.length} selectedCount={selectedId.length} />
+
+      {option.selectedItems && (
+        <Footer total={dataList.length} selectedCount={selectedId.length} />
+      )}
     </ListWrapper>
   )
 }
 
 const ListWrapper = styled.div``
 
-const AvailableWrapper = styled.div`
+const AvailableWrapper = styled.div<{ width: number; height: number }>`
   box-shadow: rgba(70, 53, 53, 0.25) 0px 0.0625em 0.0625em,
     rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em,
     rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
   border-radius: 15px;
 
-  min-width: 50rem;
-  max-width: 50rem;
-  height: 80vh;
+  min-width: 25rem;
+  width: ${({ width }) => `${width}px`};
+  height: ${({ height }) => `${height}px`};
   margin: 0 auto;
 
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
   overflow: hidden;
+  margin-bottom: 2rem;
 `
 
 const Availabletype = styled.div`
@@ -306,6 +313,24 @@ const SingleList = styled.div<CssProps>`
     font-weight: 700;
     line-height: 1.333;
     transition: 0.2s ease-out;
+  }
+`
+
+const ListContent = styled.div`
+  & span:first-child {
+    margin-right: 1.5rem;
+  }
+
+  &.XS span {
+    font-size: 1.5rem;
+  }
+
+  &.S span {
+    font-size: 2rem;
+  }
+
+  &.M span {
+    font-size: 2.5rem;
   }
 `
 

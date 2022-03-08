@@ -22,7 +22,7 @@ function OptionInput({
   const dispatch = useAppDispatch()
 
   const [value, setValue] = useState<number | string>('')
-  const onChangeDebounce = useCallback(InputDebounce(500), [])
+  const onChangeDebounce = useCallback(InputDebounce(800), [])
   const onHandleValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (name === 'width' || name === 'height') {
       if (e.target.value.length > e.target.maxLength) {
