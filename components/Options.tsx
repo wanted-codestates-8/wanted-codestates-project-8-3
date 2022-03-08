@@ -3,13 +3,26 @@ import SearchBar from './SearchBar'
 import Footer from './Footer'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { useAppSelector } from 'redux/store'
+import { useState } from 'react'
 
 interface IOptions {
   type: 'available' | 'selected'
 }
 
+interface CssProps {
+  checkedColor: boolean
+  id: any
+  selectedId: any
+}
+
 const Options = ({ type }: IOptions) => {
   const dataList = useAppSelector((state) => state.selector.items[type])
+  const [checkedId, setCheckedId]: any = useState([1])
+  const [checkedColor, setCheckedColor] = useState(false)
+  const filterId = dataList.filter((item) => checkedId.includes(item.id))
+  const selectedId = filterId.map((item) => item.id)
+
+  console.log(selectedId.length, type)
 
   return (
     <ListWrapper>
@@ -31,6 +44,15 @@ const Options = ({ type }: IOptions) => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
+                        onClick={(event) => {
+                          if (event.ctrlKey || event.metaKey) {
+                            setCheckedId([...checkedId, el.id])
+                            setCheckedColor(!checkedColor)
+                          }
+                        }}
+                        checkedColor={checkedColor}
+                        id={el.id}
+                        selectedId={selectedId}
                       >
                         <div>
                           {el.emoji} &nbsp;&nbsp;&nbsp; {el.name}
@@ -45,7 +67,7 @@ const Options = ({ type }: IOptions) => {
           )}
         </Droppable>
       </AvailableWrapper>
-      <Footer total={dataList.length} />
+      <Footer total={dataList.length} selectedCount={selectedId.length} />
     </ListWrapper>
   )
 }
@@ -81,7 +103,7 @@ const ListBox = styled.div`
   min-height: 100%;
 `
 
-const SingleList = styled.div`
+const SingleList = styled.div<CssProps>`
   display: flex;
   flex-direction: row;
   font-size: 2.5rem;
@@ -114,6 +136,11 @@ const SingleList = styled.div`
     transform-origin: 0 bottom 0;
     transform: scaleY(0);
     transition: 0.2s ease-out;
+    ${({ selectedId, id }) => {
+      return selectedId.includes(id)
+        ? 'transform: scaleY(1)'
+        : 'transform: scaleY(0)'
+    }}
   }
 
   &:hover {

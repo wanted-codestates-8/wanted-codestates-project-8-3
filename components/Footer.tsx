@@ -2,12 +2,15 @@ import styled from 'styled-components'
 
 interface IFooter {
   total: number
+  selectedCount: number
 }
 
-const Footer = ({ total }: IFooter) => {
+const Footer = ({ total, selectedCount }: IFooter) => {
   return (
     <>
-      <SelectedListNum>0 / {total}</SelectedListNum>
+      <SelectedListNum>
+        {selectedCount} / {total}
+      </SelectedListNum>
     </>
   )
 }
