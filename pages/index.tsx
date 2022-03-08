@@ -7,8 +7,7 @@ import Header from 'components/Header'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { useAppDispatch } from 'redux/store'
 import { dragAndDrop } from 'redux/slice'
-import { useState } from 'react'
-import Setting from 'components/Setting'
+import { useState, useCallback } from 'react'
 
 export interface ICheckedIds {
   available: number[]
@@ -22,19 +21,19 @@ const Home: NextPage = () => {
     selected: [],
   })
 
-  const onChangeAvailable = (arr: number[]) => {
-    setCheckedIds({
-      ...checkedIds,
+  const onChangeAvailable = useCallback((arr: number[]) => {
+    setCheckedIds((prev) => ({
+      ...prev,
       available: arr,
-    })
-  }
+    }))
+  }, [])
 
-  const onChangeSelected = (arr: number[]) => {
-    setCheckedIds({
-      ...checkedIds,
+  const onChangeSelected = useCallback((arr: number[]) => {
+    setCheckedIds((prev) => ({
+      ...prev,
       selected: arr,
-    })
-  }
+    }))
+  }, [])
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) {

@@ -28,7 +28,7 @@ export default function Radio() {
 
   useEffect(() => {
     dispatch(updateOption({ key: 'itemSize', value: inputStatus }))
-  }, [inputStatus])
+  }, [inputStatus, dispatch])
 
   return (
     <RadioWrap>
