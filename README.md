@@ -34,6 +34,55 @@ PROJECT PERIOD: 2022.03.07 ~ 2022.03.08
 
 <br>
 
+- 소메뉴: 크기 / 타이틀 변경
+
+<img src="https://user-images.githubusercontent.com/85816029/157239566-d1c81750-371e-4004-854f-68185c72a4b4.gif" width="700px" height="450px">
+
+
+<br>
+
+-  소메뉴: 타이틀, 검색창, 선택된 아이템 갯수 ON / OFF 및 글자 크기 변경
+
+<img src="https://user-images.githubusercontent.com/85816029/157239504-378dbcb4-b68e-42a3-bba9-e4c353a8cd79.gif" width="700px" height="450px">
+
+
+<br>
+
+- 중앙 버튼
+
+<img src="https://user-images.githubusercontent.com/85816029/157239546-ed02f8c4-ee94-4099-a43c-6195cdaa3e92.gif" width="700px" height="450px">
+
+
+<br>
+
+- 검색 기능
+
+
+<img src="https://user-images.githubusercontent.com/85816029/157239883-31ff13d5-3721-4fd3-a4c5-04bb37c4656f.gif" width="700px" height="450px">
+
+
+
+<br>
+
+- Ctrl 기능 시연
+
+<img src="https://user-images.githubusercontent.com/85816029/157239529-5f21c62e-d0d9-4da5-8731-51b6ebcf31c7.gif" width="700px" height="450px">
+
+
+<br>
+
+- Shift 기능 시연
+
+<img src="https://user-images.githubusercontent.com/85816029/157239536-2cd3325b-8251-4f80-a34b-e3e1a60eb070.gif" width="700px" height="450px">
+
+<br>
+
+- Ctrl / Shift 기능 시연
+
+<img src="https://user-images.githubusercontent.com/85816029/157239542-1bd30a98-064c-42e1-83dd-0aca5ee35667.gif" width="700px" height="450px">
+
+<br>
+
 ### 구현한 기능 목록 및 어려웠던 점
 
 <br>
