@@ -9,7 +9,9 @@ import OptionInput from './OptionInput'
 
 function Setting() {
   const [showDropdown, setShowDropdown] = useState(false)
-  const selector = useAppSelector(selectSelector)
+  const {
+    option: { showTitle },
+  } = useAppSelector(selectSelector)
 
   useEffect(() => {
     function clickOutside(e: MouseEvent) {
@@ -39,11 +41,12 @@ function Setting() {
       {showDropdown && (
         <Dropdown className="dropdown flex-center-C">
           <OptionLists type="showTitle">타이틀</OptionLists>
-
-          <Wrapper className="flex-center-C">
-            <OptionInput propertyKey={{ name: 'titles', titleIdx: 0 }} />
-            <OptionInput propertyKey={{ name: 'titles', titleIdx: 1 }} />
-          </Wrapper>
+          {showTitle && (
+            <Wrapper className="flex-center-C">
+              <OptionInput propertyKey={{ name: 'titles', titleIdx: 0 }} />
+              <OptionInput propertyKey={{ name: 'titles', titleIdx: 1 }} />
+            </Wrapper>
+          )}
 
           <OptionLists type="search">검색</OptionLists>
           <OptionLists type="onlyOne">하나씩만 옮기기</OptionLists>
@@ -86,7 +89,6 @@ const Dropdown = styled.ul`
   width: 30rem;
   margin-top: 1rem;
   background-color: white;
-
   & > li:last-child {
     border-bottom: none;
   }
