@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { selectSelector, updateOption } from 'redux/slice'
 import { useAppSelector, useAppDispatch } from 'redux/store'
 import InputDebounce from 'utils/debounce'

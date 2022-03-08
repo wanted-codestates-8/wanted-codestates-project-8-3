@@ -104,7 +104,10 @@ const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
               ...newCheckId,
             ])
           } else {
-            onChangeCheckedId([...checkedId, ...newCheckId])
+            onChangeCheckedId([
+              ...checkedId,
+              ...newCheckId.slice(0, newCheckId.length - 1),
+            ])
           }
           setStartEnd({
             start: index,
