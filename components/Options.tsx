@@ -3,8 +3,7 @@ import SearchBar from './SearchBar'
 import Footer from './Footer'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { useAppSelector } from 'redux/store'
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { ICheckedIds } from 'pages'
+import React, { useEffect, useState } from 'react'
 import { selectSelector } from 'redux/slice'
 
 interface IOptions {
@@ -32,12 +31,24 @@ const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
   const selectedId = filterId.map((item) => item.id)
   const [startEnd, setStartEnd] = useState<IStartEnd>()
 
+  useEffect(() => {
+    if (option.onlyOne) {
+      onChangeCheckedId([])
+    }
+  }, [option.onlyOne, onChangeCheckedId])
+
   // shift, ctrl, 단일 클릭 로직
   const onClick = (
     e: React.MouseEvent<HTMLDivElement>,
     id: number,
     index: number
   ) => {
+    if (option.onlyOne) {
+      e.shiftKey = false
+      e.ctrlKey = false
+      e.metaKey = false
+    }
+
     if (e.shiftKey) {
       let newCheckId: number[]
 
