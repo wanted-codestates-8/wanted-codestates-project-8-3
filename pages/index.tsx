@@ -36,6 +36,7 @@ const Home: NextPage = () => {
   }
 
   return (
+
     <DragDropContext onDragEnd={handleDragEnd}>
       <Header />
       <Main>
@@ -45,6 +46,7 @@ const Home: NextPage = () => {
         <Setting />
       </Main>
     </DragDropContext>
+
   )
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { FaCog } from 'react-icons/fa'
 import { selectSelector } from 'redux/slice'
@@ -8,13 +8,29 @@ import OptionLists from './OptionLists'
 import OptionInput from './OptionInput'
 
 function Setting() {
-  const [showDropdown, setShowDropdown] = useState(true)
-  const selector = useAppSelector(selectSelector)
+  const [showDropdown, setShowDropdown] = useState(false)
+  const {
+    option: { showTitle },
+  } = useAppSelector(selectSelector)
+
+  useEffect(() => {
+    function clickOutside(e: MouseEvent) {
+      const target = e.target as Element
+
+      if (!target.closest('.dropdown')) {
+        setShowDropdown(false)
+      }
+    }
+
+    document.addEventListener('click', clickOutside)
+
+    return () => document.removeEventListener('click', clickOutside)
+  }, [])
 
   return (
     <Section>
       <CogButton
-        className="flex-center"
+        className="dropdown flex-center"
         onClick={() => {
           setShowDropdown((prev) => !prev)
         }}
@@ -23,22 +39,25 @@ function Setting() {
       </CogButton>
 
       {showDropdown && (
-        <Dropdown className="flex-center-C">
-          <OptionLists>타이틀</OptionLists>
+        <Dropdown className="dropdown flex-center-C">
+          <OptionLists type="showTitle">타이틀</OptionLists>
+          {showTitle && (
+            <Wrapper className="flex-center-C">
+              <OptionInput propertyKey={{ name: 'titles', titleIdx: 0 }} />
+              <OptionInput propertyKey={{ name: 'titles', titleIdx: 1 }} />
+            </Wrapper>
+          )}
 
-          <Wrapper className="flex-center-C">
-            <OptionInput propertyKey={{ name: 'titles', titleIdx: 0 }} />
-            <OptionInput propertyKey={{ name: 'titles', titleIdx: 1 }} />
-          </Wrapper>
-
-          <OptionLists>검색</OptionLists>
-          <OptionLists>하나씩만 옮기기</OptionLists>
-          <OptionLists>선택된 아이탬 개수 표시</OptionLists>
+          <OptionLists type="search">검색</OptionLists>
+          <OptionLists type="onlyOne">하나씩만 옮기기</OptionLists>
+          <OptionLists type="selectedItems">
+            선택된 아이탬 개수 표시
+          </OptionLists>
           <Radio />
 
           <Wrapper className="flex-center-C">
             <OptionInput propertyKey={{ name: 'width' }} debounce />
-            <OptionInput propertyKey={{ name: 'width' }} debounce />
+            <OptionInput propertyKey={{ name: 'height' }} debounce />
           </Wrapper>
         </Dropdown>
       )}
@@ -69,6 +88,10 @@ const Dropdown = styled.ul`
   border-radius: 1rem;
   width: 30rem;
   margin-top: 1rem;
+  background-color: white;
+  & > li:last-child {
+    border-bottom: none;
+  }
 `
 
 const rotateZ = css`

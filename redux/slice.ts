@@ -32,7 +32,7 @@ const initialState: SelectorState = {
     search: true,
     onlyOne: true,
     selectedItems: true,
-    itemSize: 's',
+    itemSize: 'XS',
     width: 171,
     height: 300,
   },

@@ -1,17 +1,30 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { updateOption, selectSelector } from 'redux/slice'
+import { useAppDispatch, useAppSelector } from 'redux/store'
 
 interface ListType {
+  type: 'showTitle' | 'search' | 'onlyOne' | 'selectedItems'
   children: string
 }
 
-const OptionLists = ({ children }: ListType) => {
-  const [checked, setChecked] = useState(true)
+const OptionLists = ({ type, children }: ListType) => {
+  const dispatch = useAppDispatch()
+  const { option } = useAppSelector(selectSelector)
+  const [checked, setChecked] = useState(option[type])
+
+  useEffect(() => {
+    dispatch(updateOption({ key: type, value: checked }))
+  }, [checked])
 
   return (
     <List>
       <SubTitle>{children}</SubTitle>
-      <CheckButton onClick={() => setChecked((prev) => !prev)}>
+      <CheckButton
+        onClick={() => {
+          setChecked((prev) => !prev)
+        }}
+      >
         {checked ? '🟢 ' : ' 🔴'}
       </CheckButton>
     </List>
