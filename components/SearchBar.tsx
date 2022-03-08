@@ -6,7 +6,7 @@ interface SearchProps {
   setSearchResult: Dispatch<SetStateAction<typeof emojiMenus>>
 }
 
-const SearchBar = ({ setSearchResult }: SearchProps) => {
+const SearchBar = () => {
   const [searchKeyword, setSearchKeyword] = useState<string>('')
   const [resultList, setResultList] = useState<typeof emojiMenus>([])
 
@@ -18,7 +18,7 @@ const SearchBar = ({ setSearchResult }: SearchProps) => {
       searchList = emojiMenus.filter((e) => e.name.includes(keyword))
     }
     setSearchKeyword(keyword)
-    setSearchResult(searchList)
+    // setSearchResult(searchList)
   }
 
   return (
