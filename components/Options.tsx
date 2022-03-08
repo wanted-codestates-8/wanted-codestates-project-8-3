@@ -3,16 +3,16 @@ import SearchBar from './SearchBar'
 import Footer from './Footer'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { useAppSelector } from 'redux/store'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface IOptions {
   type: 'available' | 'selected'
 }
 
 interface CssProps {
-  checkedColor: boolean
   id: any
   selectedId: any
+  soloId: any
 }
 
 interface IStartEnd {
@@ -23,10 +23,10 @@ interface IStartEnd {
 const Options = ({ type }: IOptions) => {
   const dataList = useAppSelector((state) => state.selector.items[type])
   const [checkedId, setCheckedId] = useState<number[]>([])
-  const [checkedColor, setCheckedColor] = useState(false)
   const filterId = dataList.filter((item) => checkedId.includes(item.id))
   const selectedId = filterId.map((item) => item.id)
   const [startEnd, setStartEnd] = useState<IStartEnd>()
+  const [soloId, setSoloId] = useState<number>()
 
   const onClick = (
     e: React.MouseEvent<HTMLDivElement>,
@@ -78,11 +78,15 @@ const Options = ({ type }: IOptions) => {
           setCheckedId([...checkedId, id])
         }
       } else {
-        // e.currentTarget.classList.toggle('selected')
+        setSoloId(id)
+        if (checkedId.length > 0) {
+          setCheckedId([])
+        } else {
+          setCheckedId([id])
+        }
       }
     }
   }
-
   return (
     <ListWrapper>
       <SearchBar />
@@ -104,9 +108,9 @@ const Options = ({ type }: IOptions) => {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         onClick={(e) => onClick(e, el.id, index)}
-                        checkedColor={checkedColor}
                         id={el.id}
                         selectedId={selectedId}
+                        soloId={soloId}
                       >
                         <div>
                           {el.emoji} &nbsp;&nbsp;&nbsp; {el.name}
@@ -191,10 +195,21 @@ const SingleList = styled.div<CssProps>`
     transform: scaleY(0);
     transition: 0.2s ease-out;
     ${({ selectedId, id }) => {
-      return selectedId.includes(id)
-        ? 'transform: scaleY(1)'
-        : 'transform: scaleY(0)'
-    }}
+      // ctrl + click
+      return selectedId.includes(id) ? 'transform: scaleY(1)' : ''
+    }};
+    ${({ soloId, id }) => {
+      // 일반 클릭
+      return soloId === id ? 'transform: scaleY(1)' : ''
+    }};
+  }
+
+  &.selected:before {
+    transform: scaleY(1);
+  }
+
+  &.notSelected:before {
+    transform: scaleY(0);
   }
 
   &:hover {
