@@ -75,21 +75,23 @@ export const selectorSlice = createSlice({
       state,
       action: PayloadAction<{
         items: keyof SelectorState['items']
-        from: number
-        to: number
+        from: {
+          type: keyof SelectorState['items']
+          index: number
+        }
+        to: {
+          type: keyof SelectorState['items']
+          index: number
+        }
       }>
     ) => {
       const { items, from, to } = action.payload
 
-      // const selectedItems = state.items[items]
-      // ;[selectedItems[from], selectedItems[to]] = [
-      //   selectedItems[to],
-      //   selectedItems[from],
-      // ]
+      const selectedItems = state.items[from.type]
+      const removeItem = selectedItems.splice(from.index, 1)
 
-      const selectedItems = state.items[items]
-      const removeItem = selectedItems.splice(from, 1)
-      selectedItems.splice(to, 0, removeItem[0])
+      const dropItems = state.items[to.type]
+      dropItems.splice(to.index, 0, removeItem[0])
     },
     updateOption: (
       state,
