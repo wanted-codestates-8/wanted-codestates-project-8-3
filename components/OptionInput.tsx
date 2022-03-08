@@ -79,13 +79,13 @@ function OptionInput({
     case 'width':
       return defaultInput({
         type: 'text',
-        placeholder: `가로(현재 크기 ${width}px)`,
+        placeholder: `가로(현재 크기 ${width}px, 최소 250px)`,
         maxLength: 3,
       })
     case 'height':
       return defaultInput({
         type: 'text',
-        placeholder: `세로(현재 크기 ${height}px)`,
+        placeholder: `세로(현재 크기 ${height}px, 최소 250px)`,
         maxLength: 3,
       })
     case 'titles':
@@ -99,7 +99,7 @@ function OptionInput({
 
 const Input = styled.input`
   padding: 0.7rem 1.5rem;
-  width: 80%;
+  width: 100%;
   align-self: flex-start;
   border: 0.2rem solid ${({ theme }) => theme.colors.grayOne};
   border-radius: 0.5rem;
