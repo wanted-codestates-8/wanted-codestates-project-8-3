@@ -21,6 +21,7 @@ interface IStartEnd {
 
 const Options = ({ type }: IOptions) => {
   const dataList = useAppSelector((state) => state.selector.items[type])
+  const [query, setQuery] = useState('')
   const [checkedId, setCheckedId] = useState<number[]>([])
   const filterId = dataList.filter((item) => checkedId.includes(item.id))
   const selectedId = filterId.map((item) => item.id)
@@ -111,38 +112,54 @@ const Options = ({ type }: IOptions) => {
       }
     }
   }
+
+  const showList = () => {
+    if (query.length > 0) {
+      const filtered = dataList.filter((el) =>
+        el.name.toLowerCase().includes(query)
+      )
+      return filtered.map((el) => {
+        return (
+          <SingleList key={el.id} id={el.id} selectedId={selectedId}>
+            <div>
+              {el.emoji} &nbsp;&nbsp;&nbsp; {el.name}
+            </div>
+          </SingleList>
+        )
+      })
+    } else {
+      return dataList.map((el, index) => {
+        return (
+          <Draggable key={el.id} draggableId={String(el.id)} index={index}>
+            {(provided) => (
+              <SingleList
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                onClick={(e) => onClick(e, el.id, index)}
+                id={el.id}
+                selectedId={selectedId}
+              >
+                <div>
+                  {el.emoji} &nbsp;&nbsp;&nbsp; {el.name}
+                </div>
+              </SingleList>
+            )}
+          </Draggable>
+        )
+      })
+    }
+  }
+
   return (
     <ListWrapper>
-      <SearchBar />
+      <SearchBar setQuery={setQuery} />
       <AvailableWrapper>
         <Availabletype>{type} options</Availabletype>
         <Droppable droppableId={type}>
           {(provided) => (
             <ListBox {...provided.droppableProps} ref={provided.innerRef}>
-              {dataList.map((el, index) => {
-                return (
-                  <Draggable
-                    key={el.id}
-                    draggableId={String(el.id)}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <SingleList
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        onClick={(e) => onClick(e, el.id, index)}
-                        id={el.id}
-                        selectedId={selectedId}
-                      >
-                        <div>
-                          {el.emoji} &nbsp;&nbsp;&nbsp; {el.name}
-                        </div>
-                      </SingleList>
-                    )}
-                  </Draggable>
-                )
-              })}
+              {showList()}
               {provided.placeholder}
             </ListBox>
           )}

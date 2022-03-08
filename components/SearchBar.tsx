@@ -1,37 +1,17 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import styled from 'styled-components'
-import { emojiMenus } from 'redux/sample_data'
 
 interface SearchProps {
-  setSearchResult: Dispatch<SetStateAction<typeof emojiMenus>>
+  setQuery: Dispatch<SetStateAction<string>>
 }
 
-const SearchBar = () => {
-  const [searchKeyword, setSearchKeyword] = useState<string>('')
-  const [resultList, setResultList] = useState<typeof emojiMenus>([])
-
-  let searchList: typeof emojiMenus = []
-
-  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    let keyword = e.target.value
-    if (keyword.length > 0) {
-      searchList = emojiMenus.filter((e) => e.name.includes(keyword))
-    }
-    setSearchKeyword(keyword)
-    // setSearchResult(searchList)
-  }
+const SearchBar = ({ setQuery }: SearchProps) => {
+  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setQuery(e.target.value.toLowerCase())
 
   return (
     <SearchWrapper>
       <SearchInput placeholder="search" onChange={onChangeSearch} />
-      {resultList.map((item) => {
-        return (
-          <li key={item.id}>
-            <span>{item.emoji}</span>
-            <span>{item.name}</span>
-          </li>
-        )
-      })}
     </SearchWrapper>
   )
 }
