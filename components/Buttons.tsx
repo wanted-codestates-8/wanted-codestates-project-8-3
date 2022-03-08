@@ -55,7 +55,9 @@ const Buttons = ({
           </ButtonItem>
           <ButtonItem>
             <Button
-              className="gray"
+              className={
+                checkedIds.available.length > 0 ? 'active' : 'disabled'
+              }
               type="button"
               onClick={() => {
                 dispatch(moveToSelected(checkedIds.available))
@@ -67,7 +69,7 @@ const Buttons = ({
           </ButtonItem>
           <ButtonItem>
             <Button
-              className="gray"
+              className={checkedIds.selected.length > 0 ? 'active' : 'disabled'}
               type="button"
               onClick={() => {
                 dispatch(moveToAvailable(checkedIds.selected))
@@ -90,12 +92,17 @@ const Container = styled.div`
 
 const ButtonBox = styled.div`
   border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  overflow: hidden;
 `
 
 const ButtonList = styled.ul`
+  /* padding: 5px; */
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* border: 1px solid #d8d8d8; */
+  /* border-radius: 10px; */
 `
 
 const ButtonItem = styled.li`
@@ -110,8 +117,12 @@ const Button = styled.button`
   padding: 10px;
   cursor: pointer;
 
-  &.gray {
+  &.disabled {
     color: #b2b2b2;
+  }
+
+  &.active {
+    color: black;
   }
 
   &:hover {

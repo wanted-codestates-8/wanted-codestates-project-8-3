@@ -58,7 +58,6 @@ const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
         if (checkedId.includes(id)) {
           if (startEnd.direction && startEnd.end !== null) {
             if (startEnd.direction === 'up') {
-              // TODO 로직 단순화 가능
               newCheckId = dataList
                 .slice(index, startEnd.end + 1)
                 .map((data) => data.id)
@@ -105,10 +104,7 @@ const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
               ...newCheckId,
             ])
           } else {
-            onChangeCheckedId([
-              ...checkedId,
-              ...newCheckId.slice(1, newCheckId.length + 1),
-            ])
+            onChangeCheckedId([...checkedId, ...newCheckId])
           }
           setStartEnd({
             start: index,
