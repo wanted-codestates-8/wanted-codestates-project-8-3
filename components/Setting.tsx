@@ -28,7 +28,7 @@ function Setting() {
   }, [])
 
   return (
-    <Section>
+    <Section showDropDown={showDropdown}>
       <CogButton
         opened={showDropdown}
         className={`dropdown flex-center${showDropdown ? ' active' : ''}`}
@@ -77,13 +77,13 @@ function Setting() {
   )
 }
 
-const Section = styled.section`
+const Section = styled.section<{ showDropDown: boolean }>`
   position: absolute;
   top: 0rem;
   right: 1.5rem;
   display: flex;
   flex-direction: column;
-  z-index: 100;
+  z-index: ${({ showDropDown }) => (showDropDown ? 100 : 0)};
 `
 const CogButton = styled.button<{ opened: boolean }>`
   font-size: 2rem;
