@@ -3,7 +3,7 @@ import SearchBar from './SearchBar'
 import Footer from './Footer'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { useAppSelector } from 'redux/store'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 interface IOptions {
   type: 'available' | 'selected'
@@ -15,14 +15,68 @@ interface CssProps {
   selectedId: any
 }
 
+interface IStartEnd {
+  start: number | null
+  end: number | null
+}
+
 const Options = ({ type }: IOptions) => {
   const dataList = useAppSelector((state) => state.selector.items[type])
-  const [checkedId, setCheckedId]: any = useState([1])
+  const [checkedId, setCheckedId] = useState<number[]>([])
   const [checkedColor, setCheckedColor] = useState(false)
   const filterId = dataList.filter((item) => checkedId.includes(item.id))
   const selectedId = filterId.map((item) => item.id)
+  const [startEnd, setStartEnd] = useState<IStartEnd>()
 
-  console.log(selectedId.length, type)
+  const onClick = (
+    e: React.MouseEvent<HTMLDivElement>,
+    id: number,
+    index: number
+  ) => {
+    if (e.shiftKey) {
+      let newCheckId: number[]
+
+      if (!startEnd?.start) {
+        newCheckId = dataList.slice(0, index + 1).map((data) => data.id)
+        setCheckedId(newCheckId)
+
+        setStartEnd({
+          start: 0,
+          end: index,
+        })
+      } else {
+        if (index < startEnd.start) {
+          newCheckId = dataList
+            .slice(index, startEnd.start + 1)
+            .map((data) => data.id)
+          setStartEnd({
+            start: index,
+            end: startEnd.start,
+          })
+        } else {
+          newCheckId = dataList
+            .slice(startEnd.start, index + 1)
+            .map((data) => data.id)
+
+          setStartEnd({
+            ...startEnd,
+            end: index,
+          })
+        }
+
+        setCheckedId(newCheckId)
+      }
+    } else {
+      setStartEnd({
+        start: index,
+        end: null,
+      })
+      if (e.ctrlKey || e.metaKey) {
+        setCheckedId([...checkedId, id])
+        setCheckedColor(!checkedColor)
+      }
+    }
+  }
 
   return (
     <ListWrapper>
@@ -44,12 +98,7 @@ const Options = ({ type }: IOptions) => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        onClick={(event) => {
-                          if (event.ctrlKey || event.metaKey) {
-                            setCheckedId([...checkedId, el.id])
-                            setCheckedColor(!checkedColor)
-                          }
-                        }}
+                        onClick={(e) => onClick(e, el.id, index)}
                         checkedColor={checkedColor}
                         id={el.id}
                         selectedId={selectedId}
