@@ -8,6 +8,7 @@ import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { useAppDispatch } from 'redux/store'
 import { dragAndDrop } from 'redux/slice'
 import { useState } from 'react'
+import Setting from 'components/Setting'
 
 export interface ICheckedIds {
   available: number[]
@@ -62,25 +63,24 @@ const Home: NextPage = () => {
     <DragDropContext onDragEnd={handleDragEnd}>
       <Header />
       <Wrapper>
-      <Main>
-        <Options
-          type={'available'}
-          checkedId={checkedIds.available}
-          onChangeCheckedId={onChangeAvailable}
-        />
-        <Buttons
-          checkedIds={checkedIds}
-          onAvailableChange={onChangeAvailable}
-          onSelectedChange={onChangeSelected}
-        />
-        <Options
-          type={'selected'}
-          checkedId={checkedIds.selected}
-          onChangeCheckedId={onChangeSelected}
-        />
-        <Setting />
-      </Main>
-        </Wrapper>
+        <Main>
+          <Options
+            type={'available'}
+            checkedId={checkedIds.available}
+            onChangeCheckedId={onChangeAvailable}
+          />
+          <Buttons
+            checkedIds={checkedIds}
+            onAvailableChange={onChangeAvailable}
+            onSelectedChange={onChangeSelected}
+          />
+          <Options
+            type={'selected'}
+            checkedId={checkedIds.selected}
+            onChangeCheckedId={onChangeSelected}
+          />
+        </Main>
+      </Wrapper>
     </DragDropContext>
   )
 }

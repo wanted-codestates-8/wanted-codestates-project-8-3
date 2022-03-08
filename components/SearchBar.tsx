@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import styled from 'styled-components'
 
 interface SearchProps {
@@ -8,6 +8,12 @@ interface SearchProps {
 const SearchBar = ({ setQuery }: SearchProps) => {
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) =>
     setQuery(e.target.value.toLowerCase())
+
+  useEffect(() => {
+    return () => {
+      setQuery('')
+    }
+  }, [setQuery])
 
   return (
     <SearchWrapper>

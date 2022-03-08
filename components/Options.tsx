@@ -5,6 +5,7 @@ import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { useAppSelector } from 'redux/store'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { ICheckedIds } from 'pages'
+import { selectSelector } from 'redux/slice'
 
 interface IOptions {
   type: 'available' | 'selected'
@@ -16,7 +17,6 @@ interface CssProps {
   id: any
   selectedId: any
 }
-
 
 interface IStartEnd {
   start: number | null
@@ -179,9 +179,9 @@ const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
         return (
           <SingleList key={el.id} id={el.id} selectedId={selectedId}>
             <ListContent className={`${option.itemSize}`}>
-                          <span>{el.emoji}</span>
-                          <span>{el.name}</span>
-                        </ListContent>
+              <span>{el.emoji}</span>
+              <span>{el.name}</span>
+            </ListContent>
           </SingleList>
         )
       })
@@ -198,10 +198,10 @@ const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
                 id={el.id}
                 selectedId={selectedId}
               >
-               <ListContent className={`${option.itemSize}`}>
-                          <span>{el.emoji}</span>
-                          <span>{el.name}</span>
-                        </ListContent>
+                <ListContent className={`${option.itemSize}`}>
+                  <span>{el.emoji}</span>
+                  <span>{el.name}</span>
+                </ListContent>
               </SingleList>
             )}
           </Draggable>
@@ -212,9 +212,11 @@ const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
 
   return (
     <ListWrapper>
-      <SearchBar setQuery={setQuery} />
-      <AvailableWrapper>
-        <Availabletype>{type} options</Availabletype>
+      {option.search && <SearchBar setQuery={setQuery} />}
+      <AvailableWrapper width={option.width} height={option.height}>
+        <Availabletype>
+          {type === 'available' ? option.titles[0] : option.titles[1]}
+        </Availabletype>
         <Droppable droppableId={type}>
           {(provided) => (
             <ListBox {...provided.droppableProps} ref={provided.innerRef}>
