@@ -48,15 +48,15 @@ export const selectorSlice = createSlice({
     moveToAvailable: (state, action: PayloadAction<number[]>) => {
       for (const id of action.payload) {
         const targetIdx = state.items.selected.findIndex((v) => v.id === id)
-        state.items.available.push(state.items.selected[targetIdx])
-        state.items.available.splice(targetIdx, 1)
+        state.items.available.unshift(state.items.selected[targetIdx])
+        state.items.selected.splice(targetIdx, 1)
       }
     },
     moveToSelected: (state, action: PayloadAction<number[]>) => {
       for (const id of action.payload) {
         const targetIdx = state.items.available.findIndex((v) => v.id === id)
-        state.items.selected.push(state.items.available[targetIdx])
-        state.items.selected.splice(targetIdx, 1)
+        state.items.selected.unshift(state.items.available[targetIdx])
+        state.items.available.splice(targetIdx, 1)
       }
     },
     moveAllToAvailable: (state) => {
@@ -85,7 +85,7 @@ export const selectorSlice = createSlice({
         }
       }>
     ) => {
-      const { items, from, to } = action.payload
+      const { from, to } = action.payload
 
       const selectedItems = state.items[from.type]
       const removeItem = selectedItems.splice(from.index, 1)

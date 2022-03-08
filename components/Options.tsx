@@ -3,68 +3,222 @@ import SearchBar from './SearchBar'
 import Footer from './Footer'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { useAppSelector } from 'redux/store'
-import { useState } from 'react'
-import { selectSelector } from 'redux/slice'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { ICheckedIds } from 'pages'
 
 interface IOptions {
   type: 'available' | 'selected'
+  checkedId: number[]
+  onChangeCheckedId: (arr: number[]) => void
 }
 
 interface CssProps {
-  checkedColor: boolean
   id: any
   selectedId: any
 }
 
-const Options = ({ type }: IOptions) => {
+
+interface IStartEnd {
+  start: number | null
+  end: number | null
+  direction: 'up' | 'down' | null
+}
+
+const Options = ({ type, checkedId, onChangeCheckedId }: IOptions) => {
   const { option } = useAppSelector(selectSelector)
   const dataList = useAppSelector((state) => state.selector.items[type])
-  const [checkedId, setCheckedId]: any = useState([1])
-  const [checkedColor, setCheckedColor] = useState(false)
+  const [query, setQuery] = useState('')
   const filterId = dataList.filter((item) => checkedId.includes(item.id))
   const selectedId = filterId.map((item) => item.id)
+  const [startEnd, setStartEnd] = useState<IStartEnd>()
 
-  return (
-    <ListWrapper>
-      {option.search && <SearchBar />}
-      <AvailableWrapper width={option.width} height={option.height}>
-        <Availabletype>
-          {type === 'available' ? option.titles[0] : option.titles[1]}
-        </Availabletype>
-        <Droppable droppableId={type}>
-          {(provided) => (
-            <ListBox {...provided.droppableProps} ref={provided.innerRef}>
-              {dataList.map((el, index) => {
-                return (
-                  <Draggable
-                    key={el.id}
-                    draggableId={String(el.id)}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <SingleList
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        onClick={(event) => {
-                          if (event.ctrlKey || event.metaKey) {
-                            setCheckedId([...checkedId, el.id])
-                            setCheckedColor(!checkedColor)
-                          }
-                        }}
-                        checkedColor={checkedColor}
-                        id={el.id}
-                        selectedId={selectedId}
-                      >
-                        <ListContent className={`${option.itemSize}`}>
+  // shift, ctrl, 단일 클릭 로직
+  const onClick = (
+    e: React.MouseEvent<HTMLDivElement>,
+    id: number,
+    index: number
+  ) => {
+    if (e.shiftKey) {
+      let newCheckId: number[]
+
+      // 처음 눌렀을 때
+
+      if (startEnd?.start === null || startEnd?.start === undefined) {
+        newCheckId = dataList.slice(0, index + 1).map((data) => data.id)
+        onChangeCheckedId(newCheckId)
+
+        setStartEnd({
+          start: 0,
+          end: index,
+          direction: null,
+        })
+      } else {
+        // 시프트로 영역 지정 후 안에 클릭시
+
+        if (checkedId.includes(id)) {
+          if (startEnd.direction && startEnd.end !== null) {
+            if (startEnd.direction === 'up') {
+              // TODO 로직 단순화 가능
+              newCheckId = dataList
+                .slice(index, startEnd.end + 1)
+                .map((data) => data.id)
+
+              const removeCheckId = dataList
+                .slice(startEnd.start, startEnd.end + 1)
+                .map((data) => data.id)
+
+              onChangeCheckedId([
+                ...checkedId.filter(
+                  (id: number) => !removeCheckId.includes(id)
+                ),
+                ...newCheckId,
+              ])
+            } else {
+              newCheckId = dataList
+                .slice(startEnd.start, index + 1)
+                .map((data) => data.id)
+
+              const removeCheckId = dataList
+                .slice(startEnd.start, startEnd.end + 1)
+                .map((data) => data.id)
+
+              onChangeCheckedId([
+                ...checkedId.filter(
+                  (id: number) => !removeCheckId.includes(id)
+                ),
+                ...newCheckId,
+              ])
+            }
+          }
+        } else if (index < startEnd.start) {
+          newCheckId = dataList
+            .slice(index, startEnd.start + 1)
+            .map((data) => data.id)
+
+          if (startEnd.end !== null) {
+            const shiftedCheckId = dataList
+              .slice(startEnd.start, startEnd.end + 1)
+              .map((data) => data.id)
+
+            onChangeCheckedId([
+              ...checkedId.filter((id) => !shiftedCheckId.includes(id)),
+              ...newCheckId,
+            ])
+          } else {
+            onChangeCheckedId([
+              ...checkedId,
+              ...newCheckId.slice(1, newCheckId.length + 1),
+            ])
+          }
+          setStartEnd({
+            start: index,
+            end: startEnd.start,
+            direction: 'up',
+          })
+        } else {
+          if (startEnd.end !== null) {
+            newCheckId = dataList
+              .slice(startEnd.end, index + 1)
+              .map((data) => data.id)
+
+            const shiftedCheckId = dataList
+              .slice(startEnd.start, startEnd.end + 1)
+              .map((data) => data.id)
+
+            onChangeCheckedId([
+              ...checkedId.filter((id) => !shiftedCheckId.includes(id)),
+              ...newCheckId,
+            ])
+            setStartEnd({
+              start: startEnd.end,
+              end: index,
+              direction: 'down',
+            })
+          } else {
+            newCheckId = dataList
+              .slice(startEnd.start + 1, index + 1)
+              .map((data) => data.id)
+
+            onChangeCheckedId([...checkedId, ...newCheckId])
+            setStartEnd({
+              ...startEnd,
+              end: index,
+              direction: 'down',
+            })
+          }
+        }
+      }
+    } else {
+      setStartEnd({
+        start: index,
+        end: null,
+        direction: null,
+      })
+      if (e.ctrlKey || e.metaKey) {
+        if (checkedId.includes(id)) {
+          onChangeCheckedId(checkedId.filter((v) => v !== id))
+        } else {
+          onChangeCheckedId([...checkedId, id])
+        }
+      } else {
+        if (checkedId.length === 1 && checkedId[0] === id) {
+          onChangeCheckedId([])
+        } else {
+          onChangeCheckedId([id])
+        }
+      }
+    }
+  }
+
+  const showList = () => {
+    if (query.length > 0) {
+      const filtered = dataList.filter((el) =>
+        el.name.toLowerCase().includes(query)
+      )
+      return filtered.map((el) => {
+        return (
+          <SingleList key={el.id} id={el.id} selectedId={selectedId}>
+            <ListContent className={`${option.itemSize}`}>
                           <span>{el.emoji}</span>
                           <span>{el.name}</span>
                         </ListContent>
-                      </SingleList>
-                    )}
-                  </Draggable>
-                )
-              })}
+          </SingleList>
+        )
+      })
+    } else {
+      return dataList.map((el, index) => {
+        return (
+          <Draggable key={el.id} draggableId={String(el.id)} index={index}>
+            {(provided) => (
+              <SingleList
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                onClick={(e) => onClick(e, el.id, index)}
+                id={el.id}
+                selectedId={selectedId}
+              >
+               <ListContent className={`${option.itemSize}`}>
+                          <span>{el.emoji}</span>
+                          <span>{el.name}</span>
+                        </ListContent>
+              </SingleList>
+            )}
+          </Draggable>
+        )
+      })
+    }
+  }
+
+  return (
+    <ListWrapper>
+      <SearchBar setQuery={setQuery} />
+      <AvailableWrapper>
+        <Availabletype>{type} options</Availabletype>
+        <Droppable droppableId={type}>
+          {(provided) => (
+            <ListBox {...provided.droppableProps} ref={provided.innerRef}>
+              {showList()}
               {provided.placeholder}
             </ListBox>
           )}
@@ -93,7 +247,7 @@ const AvailableWrapper = styled.div<{ width: number; height: number }>`
 
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  overflow: hidden;
   margin-bottom: 2rem;
 `
 
@@ -107,6 +261,7 @@ const Availabletype = styled.div`
 
 const ListBox = styled.div`
   min-height: 100%;
+  overflow: auto;
 `
 
 const SingleList = styled.div<CssProps>`
@@ -143,19 +298,13 @@ const SingleList = styled.div<CssProps>`
     transform: scaleY(0);
     transition: 0.2s ease-out;
     ${({ selectedId, id }) => {
-      return selectedId.includes(id)
-        ? 'transform: scaleY(1)'
-        : 'transform: scaleY(0)'
-    }}
+      // ctrl + click
+      return selectedId.includes(id) ? 'transform: scaleY(1)' : ''
+    }};
   }
 
   &:hover {
-    div {
-      color: #fff;
-    }
-    &:before {
-      transform: scaleY(1);
-    }
+    background-color: #eee;
   }
 
   div {
