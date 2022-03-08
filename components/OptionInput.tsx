@@ -52,7 +52,6 @@ function OptionInput({
 
   useEffect(() => {
     if (value) {
-      console.log(value)
       if (debounce) {
         onChangeDebounce(() => {
           dispatch(updateOption({ key: name, value }))
