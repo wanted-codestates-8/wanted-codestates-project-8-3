@@ -28,6 +28,8 @@ const Options = ({ type }: IOptions) => {
   const selectedId = filterId.map((item) => item.id)
   const [startEnd, setStartEnd] = useState<IStartEnd>()
 
+  console.log(checkedId)
+
   const onClick = (
     e: React.MouseEvent<HTMLDivElement>,
     id: number,
@@ -48,6 +50,7 @@ const Options = ({ type }: IOptions) => {
         if (index < startEnd.start) {
           newCheckId = dataList
             .slice(index, startEnd.start + 1)
+            .filter((data) => !checkedId.includes(data.id))
             .map((data) => data.id)
           setStartEnd({
             start: index,
@@ -56,6 +59,7 @@ const Options = ({ type }: IOptions) => {
         } else {
           newCheckId = dataList
             .slice(startEnd.start, index + 1)
+            .filter((data) => !checkedId.includes(data.id))
             .map((data) => data.id)
 
           setStartEnd({
@@ -64,7 +68,7 @@ const Options = ({ type }: IOptions) => {
           })
         }
 
-        setCheckedId(newCheckId)
+        setCheckedId([...checkedId, ...newCheckId])
       }
     } else {
       setStartEnd({
