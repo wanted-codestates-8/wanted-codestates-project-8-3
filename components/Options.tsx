@@ -72,8 +72,13 @@ const Options = ({ type }: IOptions) => {
         end: null,
       })
       if (e.ctrlKey || e.metaKey) {
-        setCheckedId([...checkedId, id])
-        setCheckedColor(!checkedColor)
+        if (checkedId.includes(id)) {
+          setCheckedId(checkedId.filter((v) => v !== id))
+        } else {
+          setCheckedId([...checkedId, id])
+        }
+      } else {
+        // e.currentTarget.classList.toggle('selected')
       }
     }
   }
