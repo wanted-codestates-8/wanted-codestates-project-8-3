@@ -12,7 +12,6 @@ interface IOptions {
 interface CssProps {
   id: any
   selectedId: any
-  soloId: any
 }
 
 interface IStartEnd {
@@ -26,7 +25,6 @@ const Options = ({ type }: IOptions) => {
   const filterId = dataList.filter((item) => checkedId.includes(item.id))
   const selectedId = filterId.map((item) => item.id)
   const [startEnd, setStartEnd] = useState<IStartEnd>()
-  const [soloId, setSoloId] = useState<number>()
 
   const onClick = (
     e: React.MouseEvent<HTMLDivElement>,
@@ -36,7 +34,7 @@ const Options = ({ type }: IOptions) => {
     if (e.shiftKey) {
       let newCheckId: number[]
 
-      if (!startEnd?.start) {
+      if (startEnd?.start === null || startEnd?.start === undefined) {
         newCheckId = dataList.slice(0, index + 1).map((data) => data.id)
         setCheckedId(newCheckId)
 
@@ -50,7 +48,7 @@ const Options = ({ type }: IOptions) => {
             .slice(index, startEnd.start + 1)
             .map((data) => data.id)
 
-          if (startEnd.end) {
+          if (startEnd.end !== null) {
             const shiftedCheckId = dataList
               .slice(startEnd.start, startEnd.end + 1)
               .map((data) => data.id)
@@ -59,22 +57,17 @@ const Options = ({ type }: IOptions) => {
               ...checkedId.filter((id) => !shiftedCheckId.includes(id)),
               ...newCheckId,
             ])
-            setStartEnd({
-              start: index,
-              end: startEnd.start,
-            })
           } else {
             setCheckedId([...checkedId, ...newCheckId])
-            setStartEnd({
-              ...startEnd,
-              end: index,
-            })
           }
+          setStartEnd({
+            start: index,
+            end: startEnd.start,
+          })
         } else {
-          if (startEnd.end) {
+          if (startEnd.end !== null) {
             newCheckId = dataList
               .slice(startEnd.end, index + 1)
-              // .filter((data) => !checkedId.includes(data.id))
               .map((data) => data.id)
 
             const shiftedCheckId = dataList
@@ -92,7 +85,6 @@ const Options = ({ type }: IOptions) => {
           } else {
             newCheckId = dataList
               .slice(startEnd.start, index + 1)
-              // .filter((data) => !checkedId.includes(data.id))
               .map((data) => data.id)
 
             setCheckedId([...checkedId, ...newCheckId])
@@ -115,12 +107,7 @@ const Options = ({ type }: IOptions) => {
           setCheckedId([...checkedId, id])
         }
       } else {
-        setSoloId(id)
-        if (checkedId.length > 0) {
-          setCheckedId([])
-        } else {
-          setCheckedId([id])
-        }
+        setCheckedId([id])
       }
     }
   }
@@ -147,7 +134,6 @@ const Options = ({ type }: IOptions) => {
                         onClick={(e) => onClick(e, el.id, index)}
                         id={el.id}
                         selectedId={selectedId}
-                        soloId={soloId}
                       >
                         <div>
                           {el.emoji} &nbsp;&nbsp;&nbsp; {el.name}
@@ -183,7 +169,7 @@ const AvailableWrapper = styled.div`
   display: flex;
   flex-direction: column;
   /* align-items: center; */
-  overflow: scroll;
+  overflow: hidden;
 `
 
 const Availabletype = styled.div`
@@ -196,6 +182,7 @@ const Availabletype = styled.div`
 
 const ListBox = styled.div`
   min-height: 100%;
+  overflow: auto;
 `
 
 const SingleList = styled.div<CssProps>`
@@ -234,10 +221,6 @@ const SingleList = styled.div<CssProps>`
     ${({ selectedId, id }) => {
       // ctrl + click
       return selectedId.includes(id) ? 'transform: scaleY(1)' : ''
-    }};
-    ${({ soloId, id }) => {
-      // 일반 클릭
-      return soloId === id ? 'transform: scaleY(1)' : ''
     }};
   }
 
