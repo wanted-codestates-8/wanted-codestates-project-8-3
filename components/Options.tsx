@@ -17,6 +17,7 @@ interface CssProps {
 interface IStartEnd {
   start: number | null
   end: number | null
+  direction: 'up' | 'down' | null
 }
 
 const Options = ({ type }: IOptions) => {
@@ -27,6 +28,7 @@ const Options = ({ type }: IOptions) => {
   const selectedId = filterId.map((item) => item.id)
   const [startEnd, setStartEnd] = useState<IStartEnd>()
 
+  // shift, ctrl, 단일 클릭 로직
   const onClick = (
     e: React.MouseEvent<HTMLDivElement>,
     id: number,
@@ -42,9 +44,45 @@ const Options = ({ type }: IOptions) => {
         setStartEnd({
           start: 0,
           end: index,
+          direction: null,
         })
       } else {
-        if (index < startEnd.start) {
+        if (checkedId.includes(id)) {
+          if (startEnd.direction && startEnd.end !== null) {
+            if (startEnd.direction === 'up') {
+              // TODO 로직 단순화 가능
+              newCheckId = dataList
+                .slice(index, startEnd.end + 1)
+                .map((data) => data.id)
+
+              const removeCheckId = dataList
+                .slice(startEnd.start, startEnd.end + 1)
+                .map((data) => data.id)
+
+              setCheckedId([
+                ...checkedId.filter(
+                  (id: number) => !removeCheckId.includes(id)
+                ),
+                ...newCheckId,
+              ])
+            } else {
+              newCheckId = dataList
+                .slice(startEnd.start, index + 1)
+                .map((data) => data.id)
+
+              const removeCheckId = dataList
+                .slice(startEnd.start, startEnd.end + 1)
+                .map((data) => data.id)
+
+              setCheckedId([
+                ...checkedId.filter(
+                  (id: number) => !removeCheckId.includes(id)
+                ),
+                ...newCheckId,
+              ])
+            }
+          }
+        } else if (index < startEnd.start) {
           newCheckId = dataList
             .slice(index, startEnd.start + 1)
             .map((data) => data.id)
@@ -64,6 +102,7 @@ const Options = ({ type }: IOptions) => {
           setStartEnd({
             start: index,
             end: startEnd.start,
+            direction: 'up',
           })
         } else {
           if (startEnd.end !== null) {
@@ -82,6 +121,7 @@ const Options = ({ type }: IOptions) => {
             setStartEnd({
               start: startEnd.end,
               end: index,
+              direction: 'down',
             })
           } else {
             newCheckId = dataList
@@ -92,6 +132,7 @@ const Options = ({ type }: IOptions) => {
             setStartEnd({
               ...startEnd,
               end: index,
+              direction: 'down',
             })
           }
         }
@@ -100,6 +141,7 @@ const Options = ({ type }: IOptions) => {
       setStartEnd({
         start: index,
         end: null,
+        direction: null,
       })
       if (e.ctrlKey || e.metaKey) {
         if (checkedId.includes(id)) {
