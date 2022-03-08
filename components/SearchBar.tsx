@@ -39,8 +39,8 @@ const SearchBar = () => {
 export default SearchBar
 
 const SearchWrapper = styled.div`
-  margin-top: 20px;
   padding: 0 0 2rem 0;
+  width: 100%;
 `
 
 const SearchInput = styled.input`
@@ -49,7 +49,7 @@ const SearchInput = styled.input`
   background-color: white;
   padding: 16px;
   margin-top: 10px;
-  width: 500px;
+  width: 100%;
   height: 54px;
   border: 1px solid rgb(0, 0, 0, 0.2);
   &::placeholder {

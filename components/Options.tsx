@@ -4,6 +4,7 @@ import Footer from './Footer'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { useAppSelector } from 'redux/store'
 import { useState } from 'react'
+import { selectSelector } from 'redux/slice'
 
 interface IOptions {
   type: 'available' | 'selected'
@@ -16,19 +17,20 @@ interface CssProps {
 }
 
 const Options = ({ type }: IOptions) => {
+  const { option } = useAppSelector(selectSelector)
   const dataList = useAppSelector((state) => state.selector.items[type])
   const [checkedId, setCheckedId]: any = useState([1])
   const [checkedColor, setCheckedColor] = useState(false)
   const filterId = dataList.filter((item) => checkedId.includes(item.id))
   const selectedId = filterId.map((item) => item.id)
 
-  console.log(selectedId.length, type)
-
   return (
     <ListWrapper>
-      <SearchBar />
-      <AvailableWrapper>
-        <Availabletype>{type} options</Availabletype>
+      {option.search && <SearchBar />}
+      <AvailableWrapper width={option.width} height={option.height}>
+        <Availabletype>
+          {type === 'available' ? option.titles[0] : option.titles[1]}
+        </Availabletype>
         <Droppable droppableId={type}>
           {(provided) => (
             <ListBox {...provided.droppableProps} ref={provided.innerRef}>
@@ -54,9 +56,10 @@ const Options = ({ type }: IOptions) => {
                         id={el.id}
                         selectedId={selectedId}
                       >
-                        <div>
-                          {el.emoji} &nbsp;&nbsp;&nbsp; {el.name}
-                        </div>
+                        <ListContent className={`${option.itemSize}`}>
+                          <span>{el.emoji}</span>
+                          <span>{el.name}</span>
+                        </ListContent>
                       </SingleList>
                     )}
                   </Draggable>
@@ -67,28 +70,31 @@ const Options = ({ type }: IOptions) => {
           )}
         </Droppable>
       </AvailableWrapper>
-      <Footer total={dataList.length} selectedCount={selectedId.length} />
+
+      {option.selectedItems && (
+        <Footer total={dataList.length} selectedCount={selectedId.length} />
+      )}
     </ListWrapper>
   )
 }
 
 const ListWrapper = styled.div``
 
-const AvailableWrapper = styled.div`
+const AvailableWrapper = styled.div<{ width: number; height: number }>`
   box-shadow: rgba(70, 53, 53, 0.25) 0px 0.0625em 0.0625em,
     rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em,
     rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
   border-radius: 15px;
 
-  min-width: 50rem;
-  max-width: 50rem;
-  height: 80vh;
+  min-width: 25rem;
+  width: ${({ width }) => `${width}px`};
+  height: ${({ height }) => `${height}px`};
   margin: 0 auto;
 
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
   overflow: scroll;
+  margin-bottom: 2rem;
 `
 
 const Availabletype = styled.div`
@@ -158,6 +164,24 @@ const SingleList = styled.div<CssProps>`
     font-weight: 700;
     line-height: 1.333;
     transition: 0.2s ease-out;
+  }
+`
+
+const ListContent = styled.div`
+  & span:first-child {
+    margin-right: 1.5rem;
+  }
+
+  &.XS span {
+    font-size: 1.5rem;
+  }
+
+  &.S span {
+    font-size: 2rem;
+  }
+
+  &.M span {
+    font-size: 2.5rem;
   }
 `
 

@@ -38,7 +38,7 @@ function Setting() {
       >
         <FaCog />
       </CogButton>
-      
+
       <Dropdown className="dropdown flex-center-C" opened={showDropdown}>
         <OptionLists type="showTitle">타이틀</OptionLists>
 
@@ -79,10 +79,11 @@ function Setting() {
 
 const Section = styled.section`
   position: absolute;
-  top: 1.5rem;
+  top: 0rem;
   right: 1.5rem;
   display: flex;
   flex-direction: column;
+  z-index: 100;
 `
 const CogButton = styled.button<{ opened: boolean }>`
   font-size: 2rem;
@@ -111,7 +112,8 @@ const CogButton = styled.button<{ opened: boolean }>`
       animation: ${({ opened }) =>
         !opened ? 'cogMotion 1.5s ease-in-out infinite' : 'none'};
     }
-  width: 30rem;
+  }
+
   margin-top: 1rem;
   background-color: white;
   & > li:last-child {

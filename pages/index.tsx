@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import Setting from 'components/Setting'
 
 import styled from 'styled-components'
 import Options from 'components/Options'
@@ -36,26 +35,33 @@ const Home: NextPage = () => {
   }
 
   return (
-
     <DragDropContext onDragEnd={handleDragEnd}>
       <Header />
-      <Main>
-        <Options type={'available'} />
-        <Buttons />
-        <Options type={'selected'} />
-        <Setting />
-      </Main>
+      <Wrapper>
+        <Main>
+          <Options type={'available'} />
+          <Buttons />
+          <Options type={'selected'} />
+        </Main>
+      </Wrapper>
     </DragDropContext>
-
   )
 }
 
+const Wrapper = styled.div`
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+`
+
 const Main = styled.main`
   display: flex;
+  justify-content: center;
   min-width: 120rem;
   max-width: 120rem;
-  height: 80vh;
-  margin: 0 auto;
+  height: 100%;
+  /* min-height: 100vh; */
+  margin: 0;
   position: relative;
 `
 
