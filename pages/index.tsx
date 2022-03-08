@@ -43,7 +43,7 @@ const Home: NextPage = () => {
         <Options type={'available'} />
         <Buttons />
         <Options type={'selected'} />
-        <Setting />
+        {/* <Setting /> */}
       </Main>
     </DragDropContext>
 
